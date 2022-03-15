@@ -1,6 +1,7 @@
 function createMap(){
+    clearMap();
     var mapSize = parseInt(document.getElementById('InputMapSize').value);
-    var table = document.createElement('table');
+    var table = document.querySelector('tbody');
 
     for (var i = 0; i < mapSize; i++) {
         var tr = document.createElement('tr');
@@ -11,11 +12,10 @@ function createMap(){
         }
         table.appendChild(tr);
     }
-    appendChild(table)
 }
 
 function clearMap() {
-    document.querySelector('.map').innerHTML = '';
+    document.querySelector('tbody').innerHTML = '';
 }
 
 function createLabyrinth(mapSize) {
