@@ -1,9 +1,5 @@
-var mapSize = parseInt(document.getElementById('InputMapSize').value);
-
-var elem = document.querySelector('#elem');
-createMap(elem, mapSize);
-
-function createMap(parent,mapSize){
+function createMap(){
+    var mapSize = parseInt(document.getElementById('InputMapSize').value);
     var table = document.createElement('table');
 
     for (var i = 0; i < mapSize; i++) {
@@ -15,14 +11,13 @@ function createMap(parent,mapSize){
         }
         table.appendChild(tr);
     }
-
-    parent.appendChild(table);
+    appendChild(table)
 }
 
 function clearMap() {
-    document.getElementById('elem').innerHTML = '';
+    document.querySelector('.map').innerHTML = '';
 }
 
-function createLabyrinth() {
+function createLabyrinth(mapSize) {
 
 }
