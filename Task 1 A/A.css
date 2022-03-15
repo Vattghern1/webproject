@@ -1,8 +1,5 @@
-
 tr, td{
     border: 1px solid #000000;
-
-
 }
 
 body{
@@ -12,18 +9,17 @@ body{
 
 button {
     background-color: white;
-    width: 240px;
-    margin: 10px;
+    width: 200px;
+    margin: 5px;
     border: 1px solid black;
     color: black;
-    padding: 10px 30px;
+    padding: 10px 10px;
     text-align: center;
     display: inline-block;
     font-size: 16px;
 }
 
 .map {
-
     background: #ffffff;
     border: 1px solid;
     grid-gap: 100px;
@@ -31,6 +27,22 @@ button {
     height:650px;
     position: relative;
     margin: 1em auto 2em;
+}
+
+.map-block[data-status="closed"] {
+    background: #000;
+}
+
+.map-block[data-status="begin"] {
+    background: #3fff3f;
+}
+
+.map-block[data-status="end"] {
+    background: #ff0000;
+}
+
+.map-block[data-status="path"] {
+    background: #006fff;
 }
 
 
