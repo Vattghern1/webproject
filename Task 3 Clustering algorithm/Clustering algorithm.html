@@ -5,26 +5,23 @@
     <title>Clustering</title>
     <link rel="stylesheet" href="Clustering%20algorithm.css">
 </head>
-<body style="background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 18%, rgba(0,212,255,1) 100%);">
+<body style="background: #808080">
 
 <canvas id="canvas">Hello</canvas>
-
-<div class="inputSize">
+<div class="inputCountClass">
     <div>Set clusters count:</div>
-    <input id="InputCount">
+    <div><input id="InputCount" style="border-radius: 10px; font-size: 25px; font-family: Arial"></div>
     <button class="button1">Clustering</button>
 </div>
-
 <script>
     var canvas = document.getElementById('canvas');
     var ctx = canvas.getContext('2d');
-
     var widthConst = (window.innerWidth / 100);
     var heightConst = (window.innerHeight / 100);
 
     canvas.width = widthConst * 70;
     canvas.height = heightConst * 70; // size of canvas
-    ctx.fillStyle = '#E6E6FA';
+    ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 </script>
