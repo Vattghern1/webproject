@@ -1,35 +1,45 @@
+canvas {
+    display: block;
+    margin-left: 700px;
+    border: 3px solid black;
+    border-radius: 25px;
+}
+
 .button1 {
-    background-color: white;
+    background-color: cadetblue;
     width: 240px;
-    margin: 10px;
+    margin-left: 200px;
+    margin-top: -500px;
     border: 1px solid black;
-    color: yellow;
+    color: green;
     padding: 10px 30px;
     text-align: center;
-    display: inline-block;
+    display: block;
     font-size: 16px;
 }
 
 .button2 {
-    background-color: white;
+    background-color: red;
     width: 240px;
-    margin: 10px;
+    margin-top: 10px;
+    margin-left: 200px;
     border: 1px solid black;
     color: yellow;
     padding: 10px 30px;
     text-align: center;
-    display: inline-block;
+    display: block;
     font-size: 16px;
 }
 
 .button3 {
-    background-color: white;
+    background-color: green;
     width: 240px;
-    margin: 10px;
+    margin-top: 450px;
+    margin-left: 1100px;
     border: 1px solid black;
     color: yellow;
     padding: 10px 30px;
     text-align: center;
-    display: inline-block;
+    display: block;
     font-size: 16px;
 }
