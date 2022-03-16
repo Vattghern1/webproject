@@ -4,18 +4,25 @@
     <meta charset="UTF-8">
     <title>Ants algorithm</title>
     <link rel="stylesheet" href="Ants%20algorithm.css">
-
+    <script src="Ants%20algorithm.js"></script>
 </head>
 <body>
     <canvas id = "fieldForPoints" width = "1170" height = "800" style = "border:2px solid black">Canvas</canvas>
     <script>
         var canvas = document.getElementById("fieldForPoints");
         var context = canvas.getContext('2d');
-        context.fillStyle = "grey";
-        context.fillRect(0, 0, canvas.width, canvas.height);
+
     </script>
     <div class="button1">
-        <button >Добавить точки</button>
+        <button onclick="canvas.addEventListener('mousedown', function (e) {
+            context.beginPath();
+            context.arc(e.clientX - 700, e.clientY - 10, 10, 0, Math.PI * 2);
+            context.fillStyle = 'red';
+            context.fill();
+
+            addPointsInArray(this.x, this.y);
+
+        });" >Добавить точки</button>
     </div>
 
     <div class="button2">
