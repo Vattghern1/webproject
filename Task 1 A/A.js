@@ -85,17 +85,16 @@ function setBegin(block) {
     block.style.backgroundColor = "green";
 }
 
-function createLabyrinth(mapSize) {
+function createLabyrinth() {
 
 }
 
-function findPath(mapSize) {
+function findPath() {
     createMatrix(mapSize);
 
 }
 
-function createMatrix(mapSize) {
-    mapSize = parseInt(mapSize);
+function createMatrix(m) {
     matrix = new Array(mapSize);
     for (let i = 0; i < mapSize; i++) {
         matrix[i] = new Array(mapSize);
@@ -112,13 +111,14 @@ function createMatrix(mapSize) {
                     matrix[i][j] = 0;
                     break
                 case ("green"):
-                    matrix[i][j] = 1;
+                    matrix[i][j] = 0;
+                    startBlock = matrix[i][j];
                     break;
                 case ("red"):
-                    matrix[i][j] = 2;
+                    matrix[i][j] = 0;
+                    endBlock = matrix[i][j];
                     break;
             }
         }
     }
-    return matrix;
 }
