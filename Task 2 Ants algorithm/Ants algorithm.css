@@ -43,3 +43,8 @@ canvas {
     display: block;
     font-size: 16px;
 }
+
+body {
+    background: url(../images/fon.png); background-size: 100%;
+
+}
