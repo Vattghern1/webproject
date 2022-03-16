@@ -86,7 +86,20 @@ function setBegin(block) {
 }
 
 function createLabyrinth() {
-
+    let countBlockOfLab = Math.floor(mapSize*mapSize*0.4);
+    for (let i = 0; i < countBlockOfLab; i++) {
+        let x = Math.floor(Math.random() * (mapSize));
+        let y = Math.floor(Math.random() * (mapSize));
+        let randomBlock = document.getElementById(x+" - "+y).style.backgroundColor;
+        switch (randomBlock) {
+            case "green":
+                break;
+            case "red":
+                break;
+            default:
+                setWall(document.getElementById(x+" - "+y));
+        }
+    }
 }
 
 function findPath() {
@@ -95,6 +108,7 @@ function findPath() {
 }
 
 function createMatrix(m) {
+    delete matrix;
     matrix = new Array(mapSize);
     for (let i = 0; i < mapSize; i++) {
         matrix[i] = new Array(mapSize);
