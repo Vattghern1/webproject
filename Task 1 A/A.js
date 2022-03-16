@@ -4,20 +4,20 @@ function createMap(){
     table = document.querySelector('tbody');
 
     for (let i = 0; i < mapSize; i++) {
-        tr = document.createElement('tr');
+        let tr = document.createElement('tr');
         tr.classList.add("map-line");
         for (let j = 0; j < mapSize; j++) {
-            td = document.createElement('td');
+            let td = document.createElement('td');
             td.classList.add("map-block");
-            if (i == 0 && j == 0) {
+            if (i === 0 && j === 0) {
                 lastBegin = td;
                 td.style.backgroundColor = "green";
             }
-            if (i == 1 && j == 1) {
+            if (i === 1 && j === 1) {
                 lastEnd = td;
                 td.style.backgroundColor = "red";
             }
-            td.setAttribute("onclick", "chekerButtons(this)");
+            td.setAttribute("onclick", "checkerButtons(this)");
             td.setAttribute("id", i+" - "+j)
             tr.appendChild(td);
         }
@@ -47,7 +47,7 @@ function chooseWallBeginEnd(valueSelectedButton) {
     }
 }
 
-function chekerButtons(block) {
+function checkerButtons(block) {
     let countSelectedButton = divButton.getAttribute("value");
     switch (countSelectedButton) {
         case "Begin":
@@ -107,7 +107,7 @@ function findPath() {
 
 }
 
-function createMatrix(m) {
+function createMatrix() {
     delete matrix;
     matrix = new Array(mapSize);
     for (let i = 0; i < mapSize; i++) {
