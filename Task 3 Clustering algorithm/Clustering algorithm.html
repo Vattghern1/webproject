@@ -10,27 +10,12 @@
 <canvas id="canvas">Hello</canvas>
 <div class="inputCountClass">
     <div style="margin-top: auto">Set clusters count:</div>
-    <div id="windowOfCounter" style="margin: 5px auto; border-radius: 10px; font-size: 25px; font-family: 'Montserrat SemiBold'; width: 40px; height: 40px; text-align: center">8</div>
-    <div class="rangeClass"><input type="range" min="1" max="15" step="1" id="counterClusters" oninput="sizeWindow()" value="8" style = "width: 300px"> </div>
-    <button class="button1">Clustering</button>
+    <div id="windowOfCounter">26</div>
+    <div class="rangeClass"><input type="range" min="1" max="50" step="1" id="counterClusters" oninput="sizeWindow()" value="26" style = "width: 450px"></div>
+    <button id="button1" onclick="alertFunc()">Clustering</button>
+    <button id="button2" onclick="clearing()">Clear</button>
 </div>
-<script>
-    var canvas = document.getElementById('canvas');
-    var ctx = canvas.getContext('2d');
-    var widthConst = (window.innerWidth / 100);
-    var heightConst = (window.innerHeight / 100);
-
-    canvas.width = widthConst * 70;
-    canvas.height = heightConst * 70; // size of canvas
-    ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    function sizeWindow() {
-        var counterClusters = document.getElementById("counterClusters").value;
-        var windowOfCounter = document.getElementById("windowOfCounter");
-        windowOfCounter.innerText = counterClusters;
-    }
-</script>
+<script src="Clustering%20algorithm.js"></script>
 
 </body>
 </html>
