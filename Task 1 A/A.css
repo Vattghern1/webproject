@@ -17,7 +17,18 @@ button {
     text-align: center;
     display: inline-block;
     font-size: 16px;
+    border-radius: 7px;
 }
+
+button:active {
+    color: #0000ff;
+    border-color: #222222;
+}
+
+button:hover {
+    background-color: #e5e4e4;
+}
+
 
 .map {
     background: #ffffff;
@@ -25,7 +36,7 @@ button {
     grid-gap: 100px;
     width:650px;
     height:650px;
-    position: relative;
+    position: center;
     margin: 1em auto 2em;
 }
 
