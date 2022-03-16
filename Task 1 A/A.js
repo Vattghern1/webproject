@@ -1,20 +1,20 @@
 function createMap(){
     clearMap();
-    var mapSize = parseInt(document.getElementById('InputMapSize').value);
-    var table = document.querySelector('tbody');
+    mapSize = parseInt(document.getElementById('InputMapSize').value);
+    table = document.querySelector('tbody');
 
-    for (var i = 0; i < mapSize; i++) {
-        var tr = document.createElement('tr');
+    for (let i = 0; i < mapSize; i++) {
+        tr = document.createElement('tr');
         tr.classList.add("map-line");
-        for (var j = 0; j < mapSize; j++) {
-            var td = document.createElement('td');
+        for (let j = 0; j < mapSize; j++) {
+            td = document.createElement('td');
             td.classList.add("map-block");
             if (i == 0 && j == 0) {
-                var lastBegin = td;
+                lastBegin = td;
                 td.style.backgroundColor = "green";
             }
             if (i == 1 && j == 1) {
-                var lastEnd = td;
+                lastEnd = td;
                 td.style.backgroundColor = "red";
             }
             td.setAttribute("onclick", "chekerButtons(this)");
@@ -30,7 +30,7 @@ function clearMap() {
 }
 
 function chooseWallBeginEnd(valueSelectedButton) {
-    var divButton = document.getElementById("selectButton");
+    divButton = document.getElementById("selectButton");
     switch (valueSelectedButton) {
         case "Begin":
             divButton.setAttribute("value", "Begin");
@@ -48,8 +48,7 @@ function chooseWallBeginEnd(valueSelectedButton) {
 }
 
 function chekerButtons(block) {
-    var divButtons = document.getElementById('selectButton');
-    var countSelectedButton = divButtons.getAttribute("value");
+    let countSelectedButton = divButton.getAttribute("value");
     switch (countSelectedButton) {
         case "Begin":
             setBegin(block);
@@ -76,7 +75,7 @@ function setWall(block) {
     block.style.backgroundColor = "black";
 }
 
-function setEnd(block, lastEnd) {
+function setEnd(block) {
     lastEnd.style.backgroundColor = "white";
     block.style.backgroundColor = "red";
 }
@@ -91,21 +90,20 @@ function createLabyrinth(mapSize) {
 }
 
 function findPath(mapSize) {
-    var matrix = createMatrix(mapSize);
+    createMatrix(mapSize);
 
 }
 
 function createMatrix(mapSize) {
     mapSize = parseInt(mapSize);
-    var currentBlock;
-    var matrix = new Array(mapSize);
+    matrix = new Array(mapSize);
     for (let i = 0; i < mapSize; i++) {
         matrix[i] = new Array(mapSize);
     }
     for (let i = 0; i < mapSize; i++)
     {
         for (let j = 0; j < mapSize; j++) {
-            currentBlock = document.getElementById(i+" - "+j).style.backgroundColor;
+            let currentBlock = document.getElementById(i+" - "+j).style.backgroundColor;
             switch (currentBlock) {
                 case ("black"):
                     matrix[i][j] = -1;
