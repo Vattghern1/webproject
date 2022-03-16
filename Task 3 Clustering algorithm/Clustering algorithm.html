@@ -9,8 +9,9 @@
 
 <canvas id="canvas">Hello</canvas>
 <div class="inputCountClass">
-    <div style="margin-top: 10px">Set clusters count:</div>
-    <div><input id="InputCount" style="margin: 5px auto; border-radius: 10px; font-size: 25px; font-family: 'Montserrat SemiBold'; width: 40px; height: 40px; text-align: center"></div>
+    <div style="margin-top: auto">Set clusters count:</div>
+    <div id="windowOfCounter" style="margin: 5px auto; border-radius: 10px; font-size: 25px; font-family: 'Montserrat SemiBold'; width: 40px; height: 40px; text-align: center">8</div>
+    <div class="rangeClass"><input type="range" min="1" max="15" step="1" id="counterClusters" oninput="sizeWindow()" value="8" style = "width: 300px"> </div>
     <button class="button1">Clustering</button>
 </div>
 <script>
@@ -24,6 +25,11 @@
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    function sizeWindow() {
+        var counterClusters = document.getElementById("counterClusters").value;
+        var windowOfCounter = document.getElementById("windowOfCounter");
+        windowOfCounter.innerText = counterClusters;
+    }
 </script>
 
 </body>
