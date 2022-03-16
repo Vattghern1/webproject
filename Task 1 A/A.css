@@ -4,7 +4,14 @@ tr, td{
 
 body{
     background-color: #e5e4e4;
-    margin:0 auto;
+    margin: 3%;
+}
+
+.header, .inputSize, .sidebar {
+    width: 40%;
+    position: relative;
+
+
 }
 
 button {
@@ -31,12 +38,14 @@ button:hover {
 
 
 .map {
+    top:100px;
+    right: 500px;
     background: #ffffff;
     border: 1px solid;
     grid-gap: 100px;
     width:650px;
     height:650px;
-    position: center;
+    position: absolute;
     margin: 1em auto 2em;
 }
 
