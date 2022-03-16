@@ -29,8 +29,12 @@ function chooseWallBeginEnd(valueSelectedButton) {
         case "End":
             divButton.setAttribute("value", "End");
             break;
-        default:
+        case "Wall":
             divButton.setAttribute("value", "Wall");
+            break;
+        case "deleteWall":
+            divButton.setAttribute("value", "deleteWall");
+            break;
     }
 }
 
@@ -44,9 +48,17 @@ function chekerButtons(block) {
         case "End":
             setEnd(block);
             break;
-        default:
+        case "Wall":
             setWall(block);
+            break;
+        case "deleteWall":
+            deleteWall(block);
+            break;
     }
+}
+
+function deleteWall(block) {
+    block.style.backgroundColor = "white";
 }
 
 function setWall(block) {
