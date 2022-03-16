@@ -2,7 +2,7 @@ var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var widthConst = (window.innerWidth / 100);
 var heightConst = (window.innerHeight / 100);
-var button = document.getElementById('button1');
+var buttonClear = document.getElementById('button2');
 canvas.width = widthConst * 70;
 canvas.height = heightConst * 70; // size of canvas
 
@@ -26,3 +26,8 @@ canvas.addEventListener('mousedown', function (e) {
     coordsY.push(tempCoordY);
 });
 
+function clearing() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    coordsY.length = 0;
+    coordsX.length = 0;
+}
