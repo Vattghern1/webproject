@@ -5,9 +5,13 @@ canvas {
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 
+.bodyClass {
+    background: url(../images/fon.png); background-size: 100%;
+}
+
 .inputCountClass {
     display: block;
-    margin-top: 50px;
+    margin-top: 60px;
     margin-left: 700px;
     text-align: center;
     width: 480px;
@@ -20,7 +24,7 @@ canvas {
 }
 
 .button1 {
-    margin: 10px;
+    margin: 9px;
     width: 250px;
     height: 50px;
     color: white;
