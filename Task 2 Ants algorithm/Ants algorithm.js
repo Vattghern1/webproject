@@ -1,15 +1,18 @@
-var coordinatesX = new Array();
-var coordinatesY = new Array();
-var index = 0;
+coordinates = [];
 
 function addPointsInArray(x, y){
-    coordinatesX[index] = x;
-    coordinatesY[index] = y;
-
-    index++;
+    coordinates.push({x:x, y:y});
 }
 
-function makeDistanceMatrix(coordinatesX, coordinatesY){
+matrix = [];
+
+for (let i = 0; i < coordinates.length; i++){
+    matrix[i] = [];
+}
+
+function makeDistanceMatrix(coordinates){
     
+
+
 
 }
