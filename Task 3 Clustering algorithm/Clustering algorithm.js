@@ -38,7 +38,7 @@ function alertFunc() {
     }
     else {
         clustering();
-        }
+    }
 }
 
 //func to clear the canvas and array:
@@ -71,11 +71,8 @@ function generateColor() {
     return '#' + Math.floor(Math.random()*16777215).toString(16);
 }
 
-function
-function clustering() {
-    var counterClusters = document.getElementById("counterClusters").value;
-    var centralPointsX = [];
-    var centralPointsY = [];
+function distances(counterClusters, clusteringGroups, centralPointsX, centralPointsY) {
+    clusteringGroups.length = 0;
     for(var i = 0; i < counterClusters; i++) {
         centralPointsX[i] = Math.floor(Math.random()*canvas.width);
         centralPointsY[i] = Math.floor(Math.random()*canvas.height);
@@ -160,6 +157,7 @@ function clustering() {
             clustering();
         }
         else {
+
             console.log(clusteringGroups);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             drawColors(counterClusters, clusteringGroups, centralPointsX, centralPointsY);
