@@ -157,6 +157,7 @@ function clustering() {
             clustering();
         }
         else {
+            
             console.log(clusteringGroups);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             drawColors(counterClusters, clusteringGroups, centralPointsX, centralPointsY);
