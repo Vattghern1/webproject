@@ -54,7 +54,11 @@ function clearing() {
     counterPoints = 0;
 }
 
-function drawColors(counterClusters, clusteringGroups) {
+function generateColor() {
+    return '#' + Math.floor(Math.random()*16777215).toString(16);
+}
+
+function drawColors(counterClusters, clusteringGroups, centralPointsX, centralPointsY) {
     for (var i = 0; i < counterClusters; i++) {
         var colorNow = generateColor();
         for (var j = 0; j < clusteringGroups[i].length; j++) {
@@ -63,23 +67,13 @@ function drawColors(counterClusters, clusteringGroups) {
             ctx.arc(coordsX[clusteringGroups[i][j]], coordsY[clusteringGroups[i][j]], 10, 0, Math.PI * 2);
             ctx.fill();
         }
+        ctx.fillRect(centralPointsX[i], centralPointsY[i], 20, 20);
     }
     ctx.fillStyle = 'black';
 }
 
-function generateColor() {
-    return '#' + Math.floor(Math.random()*16777215).toString(16);
-}
-
-function distances(counterClusters, clusteringGroups, centralPointsX, centralPointsY) {
-    clusteringGroups.length = 0;
-    for(var i = 0; i < counterClusters; i++) {
-        centralPointsX[i] = Math.floor(Math.random()*canvas.width);
-        centralPointsY[i] = Math.floor(Math.random()*canvas.height);
-    }
-    for(var i = 0; i < counterClusters; i++) {
-        clusteringGroups[i] = [];
-    }
+function distances(counterClusters, centralPointsX, centralPointsY) {
+    var newClusteringGroups = [[]];
     for(var i = 0; i < counterPoints; i++) {
         var minLength = canvas.width+10;
         var minClusterNum = 0;
@@ -90,77 +84,55 @@ function distances(counterClusters, clusteringGroups, centralPointsX, centralPoi
                 minClusterNum = j;
             }
         }
-        clusteringGroups[minClusterNum].push(i);
+        newClusteringGroups[minClusterNum].push(i);
     }
+    return newClusteringGroups
 }
 
 
-function newClusters(counterClusters, clusteringGroups, centralPointsX, centralPointsY) {
-    centralPointsX.length = 0;
-    centralPointsY.length = 0;
+function newClusters(counterClusters, clusteringGroups, coords) {
+    var newCentralPoints = [];
     for(var i = 0; i < counterClusters; i++) {
-        var temp;
+        var temp = 0;
         for(var j = 0; j < clusteringGroups[i].length; j++) {
-            temp += coordsX[clusteringGroups[i][j]];
+            temp += coords[clusteringGroups[i][j]];
         }
-        temp = temp / clusteringGroups[i].length;
-        centralPointsX[i] = temp;
-    }
-    for(var i = 0; i < counterClusters; i++) {
-        var temp;
-        for(var j = 0; j < clusteringGroups[i].length; j++) {
-            temp += coordsY[clusteringGroups[i][j]];
+        if (clusteringGroups[i].length != 0) {
+            temp = temp / clusteringGroups[i].length;
+            newCentralPoints[i] = temp;
         }
-        temp = temp / clusteringGroups[i].length;
-        centralPointsY[i] = temp;
     }
+    return newCentralPoints;
 }
 
 function clustering() {
     var counterClusters = document.getElementById("counterClusters").value;
     var centralPointsX = [];
     var centralPointsY = [];
-    var clusteringGroups = [];
-    distances(counterClusters, clusteringGroups, centralPointsX, centralPointsY);
-    var flag = 0;
-    for(var i = 0; i < clusteringGroups.length; i++) {
-        if (clusteringGroups[i].length == 0) {
-            flag = 1;
+    var clusteringGroups = [[]];
+
+    for(var i = 0; i < counterClusters; i++) {
+        centralPointsX[i] = Math.floor(Math.random()*canvas.width);
+        centralPointsY[i] = Math.floor(Math.random()*canvas.height);
+    }
+
+    clusteringGroups = distances(counterClusters, centralPointsX, centralPointsY);
+
+    var copyCentralPointsX = centralPointsX;
+    var copyCentralPointsY = centralPointsY;
+    while (true) {
+        centralPointsX = newClusters(counterClusters, clusteringGroups, coordsX);
+        centralPointsY = newClusters(counterClusters, clusteringGroups, coordsY);
+        clusteringGroups = distances(counterClusters, centralPointsX, centralPointsY);
+        if ((copyCentralPointsX == centralPointsX) && (copyCentralPointsY == centralPointsY)) {
             break;
         }
-    }
-    if (flag == 1) {
-        clustering();
-    }
-    else {
-        var copyCentralPointsX = centralPointsX;
-        var copyCentralPointsY = centralPointsY;
-        while (true) {
-            newClusters(counterClusters, clusteringGroups, centralPointsX, centralPointsY);
-            distances(counterClusters, clusteringGroups, centralPointsX, centralPointsY);
-            if ((copyCentralPointsX == centralPointsX) && (copyCentralPointsY == centralPointsY)) {
-                break;
-            }
-            else {
-                copyCentralPointsX = centralPointsX;
-                copyCentralPointsY = centralPointsY;
-            }
-        }
-        flag = 0;
-        for(var i = 0; i < clusteringGroups.length; i++) {
-            if (clusteringGroups[i].length == 0) {
-                flag = 1;
-                break;
-            }
-        }
-        if (flag == 1) {
-            clustering();
-        }
         else {
-
-            console.log(clusteringGroups);
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawColors(counterClusters, clusteringGroups, centralPointsX, centralPointsY);
+            copyCentralPointsX = centralPointsX;
+            copyCentralPointsY = centralPointsY;
         }
     }
+    console.log(clusteringGroups);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawColors(counterClusters, clusteringGroups, centralPointsX, centralPointsY);
 }
