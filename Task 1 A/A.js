@@ -29,7 +29,7 @@ function createMap(){
                 td.style.backgroundColor = "red";
             }
             td.setAttribute("onclick", "checkerButtons(this)");
-            td.setAttribute("id", i+" - "+j)
+            td.setAttribute("id", j+" - "+i)
             tr.appendChild(td);
         }
         table.appendChild(tr);
@@ -94,140 +94,102 @@ function setBegin(block) {
     block.style.backgroundColor = "green";
 }
 
+
 function createLabyrinth() {
     createMatrix();
     for (let i = 0; i < mapSize; i++) {
         for (let j = 0; j < mapSize; j++) {
-            let allBlocks = document.getElementById(i+" - "+j).style.backgroundColor;
+            let allBlocks = document.getElementById(i + " - " + j).style.backgroundColor;
             switch (allBlocks) {
                 case "green":
                     break;
                 case "red":
                     break;
                 default:
-                    setWall(document.getElementById(i+" - "+j));
+                    setWall(document.getElementById(i + " - " + j));
             }
         }
     }
 
-    matrixLab = new Array(mapSize);
-    for (let i = 0; i < mapSize; i++) {
-        matrixLab[i] = new Array(mapSize);
+    let to_check = [];
+    if (startBlock.y - 2 >= 0) {
+        let newBlock = new blockCoordinates(startBlock.x, startBlock.y - 2)
+        to_check.push(newBlock);
     }
-    for (let i = 0; i < mapSize; i++)
-    {
-        for (let j = 0; j < mapSize; j++) {
-            matrixLab[i][j] = false;
+    if (startBlock.y + 2 < mapSize) {
+        let newBlock = new blockCoordinates(startBlock.x, startBlock.y + 2)
+        to_check.push(newBlock);
+    }
+    if (startBlock.x - 2 >= 0) {
+        let newBlock = new blockCoordinates(startBlock.x-2, startBlock.y)
+        to_check.push(newBlock);
+    }
+    if (startBlock.x + 2 < mapSize) {
+        let newBlock = new blockCoordinates(startBlock.x+2, startBlock.y)
+        to_check.push(newBlock);
+    }
+
+    while (to_check.length > 0) {
+        let index = Math.floor(Math.random() * to_check.length);
+        let cell = new blockCoordinates(to_check[index].x, to_check[index].y);
+        let x = cell.x;
+        let y = cell.y;
+        deleteWall(document.getElementById(x + " - " + y));
+        to_check.splice(index, 1);
+
+        let direction = ["directionNORTH", "directionSOUTH", "directionEAST", "directionWEST"];
+        while (direction.length > 0) {
+            let dir_index = Math.floor(Math.random() * direction.length);
+            switch (direction[dir_index]) {
+                case "directionNORTH":
+                    if (y - 2 >= 0 && document.getElementById(x+" - "+(y - 2)).style.backgroundColor === "white") {
+                        deleteWall(document.getElementById(x + " - " + (y - 1)));
+                        return;
+                    }
+                    break;
+                case "directionSOUTH":
+                    if (y + 2 < mapSize && document.getElementById(x+" - " +(y+2)).style.backgroundColor === "white") {
+                        deleteWall(document.getElementById(x + " - " + y + 1));
+                        return;
+                    }
+                    break;
+                case "directionEAST":
+                    if (x - 2 >= 0 && document.getElementById((x - 2)+ " - "+y).style.backgroundColor === "white") {
+                        deleteWall(document.getElementById((x - 1)+" - "+y));
+                        return;
+                    }
+                    break;
+                case "directionWEST":
+                    if (x + 2 < mapSize && document.getElementById((x + 2)+ " - " + y).style.backgroundColor === "white") {
+                        deleteWall(document.getElementById(x + 1 + " - " + y));
+                        return;
+                    }
+                    break;
+            }
+            direction.splice(dir_index, 1);
         }
-    }
-    matrixLab[startBlock.x][startBlock.y] = true;
-    matrixLab[endBlock.x][endBlock.y] = true;
-
-    listOfWall = [];
-    addWallsToListOfWall(startBlock);
-
-    while (listOfWall.length !== 0) {
-        let randomIndex = Math.floor(Math.random() * listOfWall.length);
-        let randomWall = listOfWall[randomIndex];
-        checkerOfWall(randomWall);
-        listOfWall.splice(randomIndex, 1);
-    }
-}
-function randomIntFromInterval(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min)
-}
-
-function checkerOfWall(randomWall) {
-    let directions = [0, 1, 2, 3];
-    while (directions.length) {
-        let randomDirections = randomIntFromInterval(0, directions.length - 1);
-        let currentDirect = directions.splice(randomDirections, 1)[0];
-        switch (currentDirect) {
-            case 0:
-                if (matrixLab[randomWall.x - 1] && matrixLab[randomWall.x + 1] && matrixLab[randomWall.x - 1][randomWall.y] === true && matrixLab[randomWall.x + 1][randomWall.y] === false) {
-                    deleteWall(document.getElementById(randomWall.x + " - " + randomWall.y));
-                    matrixLab[randomWall.x + 1][randomWall.y] = true;
-                    searchForWalls(randomWall.x, randomWall.y);
-                    return;
-                }
-                break;
-            case 1:
-                if (matrixLab[randomWall.x - 1] && matrixLab[randomWall.x + 1] && matrixLab[randomWall.x - 1][randomWall.y] === false && matrixLab[randomWall.x + 1][randomWall.y] === true) {
-                    deleteWall(document.getElementById(randomWall.x + " - " + randomWall.y));
-                    matrixLab[randomWall.x - 1][randomWall.y] = true;
-                    searchForWalls(randomWall.x, randomWall.y);
-                    return;
-                }
-                break;
-            case 2:
-                if (matrixLab[randomWall.x][randomWall.y - 1] === true && matrixLab[randomWall.x][randomWall.y + 1] === false) {
-                    deleteWall(document.getElementById(randomWall.x + " - " + randomWall.y));
-                    matrixLab[randomWall.x][randomWall.y + 1] = true;
-                    searchForWalls(randomWall.x, randomWall.y);
-                    return;
-                }
-                break;
-            case 3:
-                if (matrixLab[randomWall.x][randomWall.y - 1] === false && matrixLab[randomWall.x][randomWall.y + 1] === true) {
-                    deleteWall(document.getElementById(randomWall.x + " - " + randomWall.y));
-                    matrixLab[randomWall.x][randomWall.y - 1] = true;
-                    searchForWalls(randomWall.x, randomWall.y);
-                    return;
-                }
-                break;
+        if (y - 2 >= 0 && document.getElementById(x+" - "+(y - 2)).style.backgroundColor === "black") {
+            let newBlock = new blockCoordinates(startBlock.x, startBlock.y - 2)
+            to_check.push(newBlock);
         }
-    }
-}
-
-function searchForWalls(mainWallX, mainWallY){
-    if (matrixLab[mainWallX-1] && matrixLab[mainWallX-1][mainWallY]  === false){
-        let nextWall = new blockCoordinates(mainWallX-1, mainWallY);
-        listOfWall.push(nextWall);
-    }
-    if (matrixLab[mainWallX+1] && matrixLab[mainWallX+1][mainWallY]  === false){
-        let nextWall = new blockCoordinates(mainWallX+1, mainWallY);
-        listOfWall.push(nextWall);
-    }
-    if (matrixLab[mainWallX][mainWallY-1]  === false){
-        let nextWall = new blockCoordinates(mainWallX, mainWallY-1);
-        listOfWall.push(nextWall);
-    }
-    if (matrixLab[mainWallX][mainWallY+1] === false){
-        let nextWall = new blockCoordinates(mainWallX, mainWallY+1);
-        listOfWall.push(nextWall);
-    }
-
-
-}
-
-function addWallsToListOfWall(currentBlock) {
-    if (matrixLab[currentBlock.x - 1] && currentBlock.x > 0) {
-        matrixLab[currentBlock.x - 1][currentBlock.y] = true;
-        let newWall = new blockCoordinates(currentBlock.x - 1, currentBlock.y);
-        listOfWall.push(newWall);
-    }
-    if (matrixLab[currentBlock.x + 1] && currentBlock.x < mapSize - 1) {
-        matrixLab[currentBlock.x + 1][currentBlock.y] = true;
-        let newWall = new blockCoordinates(currentBlock.x + 1, currentBlock.y);
-        listOfWall.push(newWall);
-    }
-    if (currentBlock.y > 0) {
-        matrixLab[currentBlock.x][currentBlock.y - 1] = true;
-        let newWall = new blockCoordinates(currentBlock.x, currentBlock.y - 1);
-        listOfWall.push(newWall);
-    }
-    if (currentBlock.y < mapSize - 1) {
-        matrixLab[currentBlock.x][currentBlock.y + 1] = true;
-        let newWall = new blockCoordinates(currentBlock.x, currentBlock.y + 1);
-        listOfWall.push(newWall);
+        if (y + 2 < mapSize && document.getElementById(x+" - "+(y + 2)).style.backgroundColor === "black") {
+            let newBlock = new blockCoordinates(startBlock.x, startBlock.y + 2)
+            to_check.push(newBlock);
+        }
+        if (x - 2 >= 0 && document.getElementById((x - 2)+" - "+ y).style.backgroundColor === "black") {
+            let newBlock = new blockCoordinates(startBlock.x - 2, startBlock.y)
+            to_check.push(newBlock);
+        }
+        if (x + 2 < mapSize && document.getElementById((x + 2)+" - "+y).style.backgroundColor === "black") {
+            let newBlock = new blockCoordinates(startBlock.x + 2, startBlock.y)
+            to_check.push(newBlock);
+        }
     }
 }
 
 
 function findPath() {
     createMatrix();
-
-
 }
 
 function createMatrix() {

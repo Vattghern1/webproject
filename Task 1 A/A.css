@@ -49,21 +49,6 @@ button:hover {
     margin: 1em auto 2em;
 }
 
-.map-block[data-status="closed"] {
-    background: #000;
-}
-
-.map-block[data-status="begin"] {
-    background: #3fff3f;
-}
-
-.map-block[data-status="end"] {
-    background: #ff0000;
-}
-
-.map-block[data-status="path"] {
-    background: #006fff;
-}
 
 
 
