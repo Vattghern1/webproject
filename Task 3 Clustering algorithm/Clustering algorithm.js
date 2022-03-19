@@ -90,24 +90,22 @@ function distances(counterClusters, clusteringGroups, centralPointsX, centralPoi
         }
         clusteringGroups[minClusterNum].push(i);
     }
+    return clusteringGroups;
 }
 
 
-function newClusters(counterClusters, clusteringGroups, centralPointsX, centralPointsY) {
+function newClusters(counterClusters, clusteringGroups, centralPoints, coords) {
     for(var i = 0; i < counterClusters; i++) {
         var temp = 0;
-        var temp1 = 0;
         for(var j = 0; j < clusteringGroups[i].length; j++) {
-            temp += coordsX[clusteringGroups[i][j]];
-            temp1 += coordsY[clusteringGroups[i][j]];
+            temp += coords[clusteringGroups[i][j]];
         }
         if (clusteringGroups[i].length != 0) {
             temp = temp / clusteringGroups[i].length;
-            temp1 = temp1 / clusteringGroups[i].length;
-            centralPointsX[i] = temp;
-            centralPointsY[i] = temp1;
+            centralPoints[i] = temp;
         }
     }
+    return centralPoints;
 }
 
 function clustering() {
@@ -121,14 +119,20 @@ function clustering() {
         centralPointsY[i] = Math.floor(Math.random()*canvas.height);
     }
 
-    distances(counterClusters, clusteringGroups, centralPointsX, centralPointsY);
-
+    clusteringGroups = distances(counterClusters, clusteringGroups, centralPointsX, centralPointsY);
+    
     var copyCentralPointsX = centralPointsX;
     var copyCentralPointsY = centralPointsY;
+
+    var iterations = 0;
     while (true) {
-        newClusters(counterClusters, clusteringGroups, centralPointsX, centralPointsY);
-        distances(counterClusters, clusteringGroups, centralPointsX, centralPointsY);
-        if ((copyCentralPointsX == centralPointsX) && (copyCentralPointsY == centralPointsY)) {
+        iterations++;
+
+        centralPointsX = newClusters(counterClusters, clusteringGroups, centralPointsX, coordsX);
+        centralPointsY = newClusters(counterClusters, clusteringGroups, centralPointsY, coordsY);
+
+        clusteringGroups = distances(counterClusters, clusteringGroups, centralPointsX, centralPointsY);
+        if (((copyCentralPointsX == centralPointsX) && (copyCentralPointsY == centralPointsY)) || (iterations > 100)) {
             break;
         }
         else {
