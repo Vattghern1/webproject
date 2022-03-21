@@ -140,7 +140,7 @@ function clustering() {
 
             centralPointsX = newClusters(counterClusters, clusteringGroups, centralPointsX, coordsX);
             centralPointsY = newClusters(counterClusters, clusteringGroups, centralPointsY, coordsY);
-
+            console.log(iterations);
             clusteringGroups = distances(counterClusters, clusteringGroups, centralPointsX, centralPointsY);
             if (((copyCentralPointsX == centralPointsX) && (copyCentralPointsY == centralPointsY)) || (iterations > 100)) {
                 break;
@@ -154,14 +154,3 @@ function clustering() {
     drawColors(counterClusters, clusteringGroups, centralPointsX, centralPointsY);
 }
 
-function funcAssembler () {
-    var clusteringResults = [[]];
-    for(var i = 0; i < 10; i++) {
-        clusteringResults[i] = clustering();
-
-    }
-    var minDist = Infinity;
-    var indMinClust;
-
-
-}
