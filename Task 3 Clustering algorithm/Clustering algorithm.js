@@ -90,22 +90,17 @@ function distances(counterClusters, clusteringGroups, centralPointsX, centralPoi
         }
         clusteringGroups[minClusterNum].push(i);
     }
-    return clusteringGroups;
 }
 
 
-function newClusters(counterClusters, clusteringGroups, centralPoints, coords) {
     for(var i = 0; i < counterClusters; i++) {
         var temp = 0;
         for(var j = 0; j < clusteringGroups[i].length; j++) {
-            temp += coords[clusteringGroups[i][j]];
         }
         if (clusteringGroups[i].length != 0) {
             temp = temp / clusteringGroups[i].length;
-            centralPoints[i] = temp;
         }
     }
-    return centralPoints;
 }
 
 function clustering() {
