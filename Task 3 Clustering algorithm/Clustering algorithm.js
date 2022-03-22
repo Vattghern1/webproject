@@ -90,24 +90,22 @@ function distances(counterClusters, clusteringGroups, centralPointsX, centralPoi
         }
         clusteringGroups[minClusterNum].push(i);
     }
+    return clusteringGroups;
 }
 
 
-function newClusters(counterClusters, clusteringGroups, centralPointsX, centralPointsY) {
+function newClusters(counterClusters, clusteringGroups, centralPoints, coords) {
     for(var i = 0; i < counterClusters; i++) {
         var temp = 0;
-        var temp1 = 0;
         for(var j = 0; j < clusteringGroups[i].length; j++) {
-            temp += coordsX[clusteringGroups[i][j]];
-            temp1 += coordsY[clusteringGroups[i][j]];
+            temp += coords[clusteringGroups[i][j]];
         }
         if (clusteringGroups[i].length != 0) {
             temp = temp / clusteringGroups[i].length;
-            temp1 = temp1 / clusteringGroups[i].length;
-            centralPointsX[i] = temp;
-            centralPointsY[i] = temp1;
+            centralPoints[i] = temp;
         }
     }
+    return centralPoints;
 }
 
 function clustering() {
@@ -121,24 +119,12 @@ function clustering() {
         centralPointsY[i] = Math.floor(Math.random()*canvas.height);
     }
 
-<<<<<<< HEAD
     clusteringGroups = distances(counterClusters, clusteringGroups, centralPointsX, centralPointsY);
 
     var flag = 0;
     for (var i = 0; i < counterClusters; i++) {
         if (clusteringGroups[i].length == 0) {
             flag = 1;
-=======
-    distances(counterClusters, clusteringGroups, centralPointsX, centralPointsY);
-
-    var copyCentralPointsX = centralPointsX;
-    var copyCentralPointsY = centralPointsY;
-    while (true) {
-        newClusters(counterClusters, clusteringGroups, centralPointsX, centralPointsY);
-        distances(counterClusters, clusteringGroups, centralPointsX, centralPointsY);
-        if ((copyCentralPointsX == centralPointsX) && (copyCentralPointsY == centralPointsY)) {
-            break;
->>>>>>> parent of 776eb56 (FINAL)
         }
     }
     if (flag == 1) {
