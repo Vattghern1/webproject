@@ -47,6 +47,7 @@
 }
 
 #button2 {
+    appearance: none;
     margin: 4px auto;
     width: 250px;
     height: 50px;
