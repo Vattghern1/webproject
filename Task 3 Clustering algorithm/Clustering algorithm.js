@@ -140,7 +140,6 @@ function clustering() {
 
             centralPointsX = newClusters(counterClusters, clusteringGroups, centralPointsX, coordsX);
             centralPointsY = newClusters(counterClusters, clusteringGroups, centralPointsY, coordsY);
-            console.log(iterations);
             clusteringGroups = distances(counterClusters, clusteringGroups, centralPointsX, centralPointsY);
             if (((copyCentralPointsX == centralPointsX) && (copyCentralPointsY == centralPointsY)) || (iterations > 100)) {
                 break;
