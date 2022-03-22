@@ -107,13 +107,34 @@ function newClusters(counterClusters, clusteringGroups, centralPoints) {
             counter++
         }
         if (counter !== 0) {
-            tempX = tempX / counter;
-            tempY = tempY / counter;
+            tempX = Math.trunc(tempX / counter);
+            tempY = Math.trunc(tempY / counter);
             centralPoints.x[i] = tempX;
             centralPoints.y[i] = tempY;
         }
     }
     return centralPoints;
+}
+
+function copy(secObj, counterClusters) {
+    let firstObj = {
+        x : [],
+        y : []
+    }
+    for (let i = 0; i < counterClusters; i++) {
+        firstObj.x[i] = secObj.x[i];
+        firstObj.y[i] = secObj.y[i];
+    }
+    return firstObj;
+}
+
+function isEqual(firstObj, secObj, counter) {
+    for(let i = 0; i < counter; i++) {
+        if ((firstObj.x[i] != secObj.x[i]) || (firstObj.y[i] != secObj.y[i])) {
+            return false;
+        }
+    }
+    return true;
 }
 
 function clustering() {
@@ -132,19 +153,19 @@ function clustering() {
 
     clusteringGroups = distances(counterClusters, clusteringGroups, centralPoints);
 
-    let copyCentralPoints = centralPoints;
-
+    let previousCentralPoints = copy(centralPoints, counterClusters);
     let iterations = 0;
+
     while (true) {
         iterations++;
-        console.log(copyCentralPoints);
+
         centralPoints = newClusters(counterClusters, clusteringGroups, centralPoints);
-        console.log(copyCentralPoints);
+        console.log(iterations);
         clusteringGroups = distances(counterClusters, clusteringGroups, centralPoints);
-        if ((copyCentralPoints === centralPoints) || (iterations > 100)) {
+        if (isEqual(previousCentralPoints, centralPoints, counterClusters)) {
             break;
         } else {
-            copyCentralPoints = centralPoints;
+            previousCentralPoints = copy(centralPoints, counterClusters);
         }
     }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
