@@ -34,7 +34,7 @@ canvas.addEventListener('mousedown', function (e) {
 });
 
 function randomPoints() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    clearing();
     let randomPointsCount = Math.floor(Math.random()*500);
     counterPoints = randomPointsCount;
     for(let i = 0; i < randomPointsCount; i++) {
