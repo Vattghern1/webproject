@@ -40,7 +40,7 @@ function alertFunc() {
         alert("Кластеров не может быть большем, чем точек. Измените количество!");
     }
     else {
-        clustering();
+        bestClustering();
     }
 }
 
@@ -107,8 +107,8 @@ function newClusters(counterClusters, clusteringGroups, centralPoints) {
             counter++
         }
         if (counter !== 0) {
-            tempX = Math.trunc(tempX / counter);
-            tempY = Math.trunc(tempY / counter);
+            tempX = tempX / counter;
+            tempY = tempY / counter;
             centralPoints.x[i] = tempX;
             centralPoints.y[i] = tempY;
         }
@@ -160,7 +160,6 @@ function clustering() {
         iterations++;
 
         centralPoints = newClusters(counterClusters, clusteringGroups, centralPoints);
-        console.log(iterations);
         clusteringGroups = distances(counterClusters, clusteringGroups, centralPoints);
         if (isEqual(previousCentralPoints, centralPoints, counterClusters)) {
             break;
@@ -168,7 +167,30 @@ function clustering() {
             previousCentralPoints = copy(centralPoints, counterClusters);
         }
     }
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawColors(counterClusters, clusteringGroups, centralPoints);
+    return {
+        centralPoints : centralPoints,
+        clusteringGroups : clusteringGroups,
+        counterClusters : counterClusters
+    }
 }
 
+function bestClustering () {
+    let minDistance = Infinity;
+    let bestClusters;
+    for(let i = 0; i < 100; i++) {
+        let tempDistance = 0;
+        let resultClustering = clustering();
+        for(let j = 0; j < resultClustering.counterClusters; j++) {
+            for(let k = 0; k < resultClustering.clusteringGroups[j].length; k++) {
+                tempDistance += Math.sqrt(Math.pow((resultClustering.centralPoints.x[j] - coords.x[resultClustering.clusteringGroups[j][k]]), 2) +
+                    Math.pow((resultClustering.centralPoints.y[j] - coords.y[resultClustering.clusteringGroups[j][k]]), 2));
+            }
+        }
+        if (tempDistance < minDistance) {
+            minDistance = tempDistance;
+            bestClusters = resultClustering;
+        }
+    }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawColors(bestClusters.counterClusters, bestClusters.clusteringGroups, bestClusters.centralPoints);
+}
