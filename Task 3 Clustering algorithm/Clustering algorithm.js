@@ -33,6 +33,21 @@ canvas.addEventListener('mousedown', function (e) {
     coords.y.push(tempCoordY);
 });
 
+function randomPoints() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let randomPointsCount = Math.floor(Math.random()*500);
+    counterPoints = randomPointsCount;
+    for(let i = 0; i < randomPointsCount; i++) {
+        ctx.beginPath();
+        let randX = Math.floor(Math.random()*canvas.width);
+        let randY = Math.floor(Math.random()*canvas.height);
+        ctx.arc(randX, randY, 10, 0, Math.PI * 2);
+        ctx.fill();
+        coords.x.push(randX);
+        coords.y.push(randY);
+    }
+}
+
 //func to clustering:
 function alertFunc() {
     let counterClusters = document.getElementById("counterClusters").value;
