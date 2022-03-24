@@ -1,6 +1,6 @@
 #canvas {
     display: block;
-    margin-top: 30px;
+    margin-top: -60px;
     margin-left: 280px;
     border-radius: 25px;
     background-color: white;
@@ -73,6 +73,15 @@ button:hover {
     font-size: 25px;
     font-family: Montserrat SemiBold;
     background-color: #800000;
+}
+
+#buttonBack {
+    display: inline-block;
+    text-align: center;
+    background: 0;
+    width: 80px;
+    height: 80px;
+    border-radius: 80px;
 }
 
 input[type=range] {

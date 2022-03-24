@@ -1,4 +1,4 @@
-// canvas settings:
+//canvas settings:
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var widthConst = (window.innerWidth / 100);
@@ -6,14 +6,14 @@ var heightConst = (window.innerHeight / 100);
 canvas.width = widthConst * 70;
 canvas.height = heightConst * 70;
 
-//func to show clusters count:
+//function to show clusters count:
 function setClustersCount() {
     let counterClusters = document.getElementById("counterClusters").value;
     let windowOfCounter = document.getElementById("windowOfCounter");
     windowOfCounter.innerText = counterClusters;
 }
 
-// vars for array of coords:
+//vars for array of coords:
 var coords = {
     x : [],
     y : []
@@ -21,10 +21,10 @@ var coords = {
 
 var counterPoints = 0;
 
-// to paint points:
+//to paint points:
 canvas.addEventListener('mousedown', function (e) {
     ctx.beginPath();
-    let tempCoordX = e.clientX-280;
+    let tempCoordX = e.clientX-290;
     let tempCoordY = e.clientY-30;
     counterPoints++;
     ctx.arc(tempCoordX, tempCoordY, 10, 0, Math.PI * 2);
@@ -33,6 +33,7 @@ canvas.addEventListener('mousedown', function (e) {
     coords.y.push(tempCoordY);
 });
 
+//function to generate random points:
 function randomPoints() {
     clearing();
     let randomPointsCount = Math.floor(Math.random()*500);
@@ -48,7 +49,7 @@ function randomPoints() {
     }
 }
 
-//func to clustering:
+//function to check count of clusters and count of points:
 function alertFunc() {
     let counterClusters = document.getElementById("counterClusters").value;
     if (counterClusters > counterPoints) {
@@ -59,7 +60,7 @@ function alertFunc() {
     }
 }
 
-//func to clear the canvas and array:
+//function to clear the canvas and arrays:
 function clearing() {
     let counterClusters = document.getElementById("counterClusters");
     let windowOfCounter = document.getElementById("windowOfCounter");
@@ -76,6 +77,7 @@ function generateColor() {
     return '#' + Math.floor(Math.random()*16777215).toString(16);
 }
 
+//the last function to draw clusters:
 function drawColors(counterClusters, clusteringGroups, centralPoints) {
     for (let i = 0; i < counterClusters; i++) {
         ctx.fillStyle = generateColor();
@@ -90,6 +92,7 @@ function drawColors(counterClusters, clusteringGroups, centralPoints) {
     ctx.fillStyle = 'black';
 }
 
+//function to find the closest centroids:
 function distances(counterClusters, clusteringGroups, centralPoints) {
     clusteringGroups = [];
     for(let i = 0; i < counterClusters; i++) {
@@ -110,7 +113,7 @@ function distances(counterClusters, clusteringGroups, centralPoints) {
     return clusteringGroups;
 }
 
-
+//function to calculate new centroids:
 function newClusters(counterClusters, clusteringGroups, centralPoints) {
     for(let i = 0; i < counterClusters; i++) {
         let tempX = 0;
@@ -131,6 +134,7 @@ function newClusters(counterClusters, clusteringGroups, centralPoints) {
     return centralPoints;
 }
 
+//function to copy objects:
 function copy(secObj, counterClusters) {
     let firstObj = {
         x : [],
@@ -143,6 +147,7 @@ function copy(secObj, counterClusters) {
     return firstObj;
 }
 
+//function to check two objects for equality:
 function isEqual(firstObj, secObj, counter) {
     for(let i = 0; i < counter; i++) {
         if ((firstObj.x[i] != secObj.x[i]) || (firstObj.y[i] != secObj.y[i])) {
@@ -152,6 +157,7 @@ function isEqual(firstObj, secObj, counter) {
     return true;
 }
 
+//the main clustering function:
 function clustering() {
     let counterClusters = document.getElementById("counterClusters").value;
     let centralPoints = {
@@ -189,6 +195,7 @@ function clustering() {
     }
 }
 
+//function to choose the best clustering:
 function bestClustering () {
     let minDistance = Infinity;
     let bestClusters;

@@ -4,49 +4,71 @@ tr, td{
 
 body{
     background-color: #e5e4e4;
-    margin: 3%;
+    margin-left: 3%;
 }
 
-.header, .inputSize, .sidebar {
-    width: 40%;
-    position: relative;
+.sidebar {
+    font-family: Montserrat SemiBold;
+    font-size: 30px;
+}
 
+.inputSize {
+    font-family: Montserrat SemiBold;
+    font-size: 40px;
+}
 
+#InputMapSize {
+    width: 100px;
+    height: 100px;
+    border-radius: 30px;
+    font-size: 30px;
+    text-align: center;
+    font-family: Montserrat SemiBold;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+#buttonBack {
+    display: inline-block;
+    text-align: center;
+    background: 0;
+    width: 80px;
+    height: 80px;
+    border-radius: 80px;
+}
+
+#buttonBack:hover {
+    box-shadow: inset 0 0 0 3px #808080;
 }
 
 button {
-    background-color: white;
-    width: 200px;
-    margin: 5px;
-    border: 1px solid black;
-    color: black;
-    padding: 10px 10px;
-    text-align: center;
-    display: inline-block;
-    font-size: 16px;
-    border-radius: 7px;
-}
-
-button:active {
-    color: #0000ff;
-    border-color: #222222;
+    appearance: none;
+    margin: 4px auto;
+    width: 250px;
+    height: 50px;
+    color: white;
+    border-radius: 10px;
+    font-size: 25px;
+    font-family: Montserrat SemiBold;
+    background-color: #800000;
 }
 
 button:hover {
-    background-color: #e5e4e4;
+    box-shadow: inset 0 0 0 3px #808080;
 }
 
 
 .map {
-    top:100px;
-    right: 500px;
+    top:50px;
+    right: 300px;
     background: #ffffff;
     border: 1px solid;
     grid-gap: 100px;
-    width:650px;
-    height:650px;
+    width:800px;
+    height:800px;
     position: absolute;
     margin: 1em auto 2em;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 
 
