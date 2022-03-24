@@ -8,16 +8,17 @@
     <script src="Ants%20algorithm.js"></script>
 </head>
 <body>
+    <button id = "buttonBack"><img src = "../images/button.png" style="width: 50px; height: 50px"></button>
     <canvas id = "fieldForPoints" width = "1170" height = "800" style = "border:2px solid black">Canvas</canvas>
     <script>
         var canvas = document.getElementById("fieldForPoints");
         var context = canvas.getContext('2d');
 
     </script>
-    <div class="button1">
-        <button onclick="canvas.addEventListener('mousedown', function (e) {
+    <div>
+        <button id="button1" onclick="canvas.addEventListener('mousedown', function (e) {
             context.beginPath();
-            context.arc(e.clientX - 700, e.clientY - 10, 10, 0, Math.PI * 2);
+            context.arc(e.clientX - 700, e.clientY - 20, 10, 0, Math.PI * 2);
             context.fillStyle = 'red';
             context.fill();
 
@@ -26,12 +27,12 @@
         });" >Добавить точки</button>
     </div>
 
-    <div class="button2">
-        <button onclick="context.clearRect(0, 0, canvas.width, canvas.height)"> >Очистить поле</button>
+    <div>
+        <button id="button2" onclick="context.clearRect(0, 0, canvas.width, canvas.height)">Очистить поле</button>
     </div>
 
-    <div class="button3">
-        <button >Готово</button>
+    <div>
+        <button id = "button3">Готово</button>
     </div>
 
 </body>
