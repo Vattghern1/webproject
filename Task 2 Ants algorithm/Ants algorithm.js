@@ -18,9 +18,10 @@ function makeDistanceMatrix(){
     }
 }
 
-alpha = 1; // задаем коэффициенты
-beta = 1;
-Q = 4;
+const alpha = 1; // задаем коэффициенты
+const beta = 1;
+const Q = 4;
+const p = 0.4;
 
 antsCount = coordinates.length; //кол-во муравьев берем равным кол-ву городов
 
@@ -74,5 +75,43 @@ function getProbability(i, j){ //расчет вероятности перех�
     return (getWish(i, j) / sumWishes(i));
 }
 
+function chooseNextCity(i){ //муравей из города i выбирает следующий город
+    let probabilityArray = {
+        probability : [],
+        numberOfCity : []
+    }
+
+    for (let j = 0; j < antsCount; j++){
+        if (j != i) {
+            probabilityArray.probability.push(getProbability(i, j));
+            probabilityArray.numberOfCity.push(j);
+        }
+    }
+
+    probabilityArray.probability.sort(function(a,b){
+        return a - b
+    })
+
+    let sum = 0;
+    let randomNumber = Math.random();
+    let nextCity = probabilityArray[0].numberOfCity;
+    let index = 0;
+
+    while (sum < randomNumber){
+        sum += probabilityArray[index].probability;
+        nextCity = probabilityArray[index].numberOfCity;
+        index++;
+    }
+
+    return nextCity;
+}
+
+function deltaPheromone(i, j, currentPath){ // добавка феромона одним муравьем между городами i и j
+    return Q / currentPath;
+}
+
+function newPheromone(i, j, sumDeltaPheromone){ // обновление феромона между городом i и j на новой итерации по времени жизни колонии
+    pheromones[i][j] = (1 - p) * pheromones[i][j] + sumDeltaPheromone;
+}
 
 
