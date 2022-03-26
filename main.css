@@ -1,0 +1,20 @@
+button:hover {
+    box-shadow: inset 0 0 0 3px #808080;
+}
+
+button {
+    margin: auto;
+    margin-top: 30px;
+    width: 250px;
+    height: 50px;
+    color: white;
+    border-radius: 10px;
+    font-size: 25px;
+    font-family: Montserrat SemiBold;
+    background-color: #800000;
+    display: block;
+}
+
+.bodyClass {
+    background-color: black;
+}
