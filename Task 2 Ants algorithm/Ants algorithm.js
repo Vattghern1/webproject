@@ -143,6 +143,18 @@ function antsAlgorithm(){
             allAntsPaths[i].path = [];
         }
 
+        let sumDeltaPheromone = [];
+
+        for (let i = 0; i < antsCount; i++){
+            sumDeltaPheromone[i] = [];
+        }
+
+        for (let i = 0; i < antsCount; i++){ //создаем матрицу для суммы добавок феромона после каждой итерации и заполняем нулями
+            for (let j = 0; j < antsCount; j++){
+                sumDeltaPheromone[i][j] = 0;
+            }
+        }
+
         for (let k = 1; k <= antsCount; k++){ //запускаем всех муравьев в разные города
             let visited = [];
             let startCityNumber = k;
@@ -162,6 +174,11 @@ function antsAlgorithm(){
 
             allAntsPaths.path.push(visited);
             allAntsPaths.pathLength.push(currentLenght);
+
+            for (let i = 0; i <= antsCount - 2; i++){ //добавка феромона
+                sumDeltaPheromone[visited[i] - 1][visited[i + 1] - 1] += deltaPheromone(visited[i], visited[i + 1], currentLenght);
+            }
+
         }
 
         for (let i = 0; i < antsCount; i++){ //находим текущий кратчайший путь и его длину
@@ -171,17 +188,17 @@ function antsAlgorithm(){
             }
         }
 
-        //посчитать добавку феромона для каждого муравья, а затем общую добавку феромона, обновить феромон
+        for (let i = 0; i < antsCount; i++){ //обновление феромона
+            for (let j = 0; j < antsCount; j++){
+                newPheromone(i + 1, j + 1, sumDeltaPheromone[i][j]);
+            }
 
-
-
-
-
-
-
-
+        }
 
     }
+
+    return currentShortestPath;
+
 }
 
 
