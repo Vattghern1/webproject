@@ -93,7 +93,7 @@ function chooseNextCity(i, visited){ //муравей из города i выб
     }
 
     for (let j = 0; j < antsCount; j++){
-        if ((j != i) && (isVisited(j, visited) == false)) {
+        if ((j != i) && ((isVisited(j, visited)) == false)) {
             probabilityArray.probability.push(getProbability(i, j));
             probabilityArray.numberOfCity.push(j);
         }
@@ -200,5 +200,40 @@ function antsAlgorithm(){
     return currentShortestPath;
 
 }
+
+function drawLines(){ //соединяем города из пути коммивояжера линиями
+    var canvas = document.getElementById("fieldForPoints");
+    var context = canvas.getContext('2d');
+
+    let path = antsAlgorithm();
+
+    for (let i = 0; i <= path.length - 2; i++){
+        context.beginPath();
+        context.lineWidth = 2;
+        context.strokeStyle = 'black';
+        context.moveTo(coordinates[path[i] - 1].x, coordinates[path[i] - 1].y);
+        context.lineTo(coordinates[path[i + 1] - 1].x, coordinates[path[i + 1] - 1].y);
+        context.stroke();
+    }
+
+}
+
+function test(){
+    var canvas = document.getElementById("fieldForPoints");
+    var context = canvas.getContext('2d');
+
+    for (let i = 0; i <= coordinates.length - 2; i++){
+        context.beginPath();
+        context.lineWidth = 2;
+        context.strokeStyle = 'black';
+        context.moveTo(coordinates[i].x, coordinates[i].y);
+        context.lineTo(coordinates[i + 1].x, coordinates[i + 1].y);
+        context.stroke();
+    }
+
+
+}
+
+
 
 
