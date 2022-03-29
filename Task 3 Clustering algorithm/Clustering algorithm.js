@@ -13,6 +13,10 @@ function setClustersCount() {
     windowOfCounter.innerText = counterClusters;
 }
 
+ctx.strokeStyle = "#404040";
+ctx.lineWidth = 4;
+ctx.fillStyle = "white";
+
 //vars for array of coords:
 var coords = {
     x : [],
@@ -21,14 +25,23 @@ var coords = {
 
 var counterPoints = 0;
 
+function drawArc(x, y) {
+    ctx.beginPath();
+    ctx.arc(x, y, 15, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+}
+
+function random(maxVal) {
+    return Math.floor(Math.random()*maxVal);
+}
+
 //to paint points:
 canvas.addEventListener('mousedown', function (e) {
-    ctx.beginPath();
     let tempCoordX = e.clientX-290;
     let tempCoordY = e.clientY-30;
     counterPoints++;
-    ctx.arc(tempCoordX, tempCoordY, 10, 0, Math.PI * 2);
-    ctx.fill();
+    drawArc(tempCoordX, tempCoordY);
     coords.x.push(tempCoordX);
     coords.y.push(tempCoordY);
 });
@@ -36,14 +49,12 @@ canvas.addEventListener('mousedown', function (e) {
 //function to generate random points:
 function randomPoints() {
     clearing();
-    let randomPointsCount = Math.floor(Math.random()*500);
+    let randomPointsCount = random(500);
     counterPoints = randomPointsCount;
     for(let i = 0; i < randomPointsCount; i++) {
-        ctx.beginPath();
-        let randX = Math.floor(Math.random()*canvas.width);
-        let randY = Math.floor(Math.random()*canvas.height);
-        ctx.arc(randX, randY, 10, 0, Math.PI * 2);
-        ctx.fill();
+        let randX = random(canvas.width);
+        let randY = random(canvas.height);
+        drawArc(randX, randY);
         coords.x.push(randX);
         coords.y.push(randY);
     }
@@ -66,7 +77,6 @@ function clearing() {
     let windowOfCounter = document.getElementById("windowOfCounter");
     windowOfCounter.innerText = "1";
     counterClusters.value = 1;
-    ctx.fillStyle = "black";
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     coords.x = [];
     coords.y = [];
@@ -74,22 +84,20 @@ function clearing() {
 }
 
 function generateColor() {
-    return '#' + Math.floor(Math.random()*16777215).toString(16);
+    return '#' + random(16777215).toString(16);
 }
 
 //the last function to draw clusters:
-function drawColors(counterClusters, clusteringGroups, centralPoints) {
+function coloringClusters(counterClusters, clusteringGroups, centralPoints) {
     for (let i = 0; i < counterClusters; i++) {
         ctx.fillStyle = generateColor();
-        for (let j = 0; j < clusteringGroups[i].length; j++) {
-            ctx.beginPath();
-            ctx.arc(coords.x[clusteringGroups[i][j]], coords.y[clusteringGroups[i][j]], 10, 0, Math.PI * 2);
-            ctx.fill();
-        }
         ctx.beginPath();
         ctx.fillRect(centralPoints.x[i]-10, centralPoints.y[i]-10, 20, 20);
+        for (let j = 0; j < clusteringGroups[i].length; j++) {
+            drawArc(coords.x[clusteringGroups[i][j]], coords.y[clusteringGroups[i][j]]);
+        }
     }
-    ctx.fillStyle = 'black';
+    ctx.fillStyle = 'white';
 }
 
 //function to find the closest centroids:
@@ -131,26 +139,17 @@ function newClusters(counterClusters, clusteringGroups, centralPoints) {
             centralPoints.y[i] = tempY;
         }
     }
-    return centralPoints;
 }
 
 //function to copy objects:
-function copy(secObj, counterClusters) {
-    let firstObj = {
-        x : [],
-        y : []
-    }
-    for (let i = 0; i < counterClusters; i++) {
-        firstObj.x[i] = secObj.x[i];
-        firstObj.y[i] = secObj.y[i];
-    }
-    return firstObj;
+function copy(obj) {
+    return obj;
 }
 
 //function to check two objects for equality:
 function isEqual(firstObj, secObj, counter) {
     for(let i = 0; i < counter; i++) {
-        if ((firstObj.x[i] != secObj.x[i]) || (firstObj.y[i] != secObj.y[i])) {
+        if ((firstObj.x[i] != secObj.x[i]) && (firstObj.y[i] != secObj.y[i])) {
             return false;
         }
     }
@@ -168,19 +167,16 @@ function clustering() {
 
     for(let i = 0; i < counterClusters; i++) {
         clusteringGroups[i] = [];
-        centralPoints.x[i] = Math.floor(Math.random()*canvas.width);
-        centralPoints.y[i] = Math.floor(Math.random()*canvas.height);
+        centralPoints.x[i] = random(canvas.width);
+        centralPoints.y[i] = random(canvas.height);
     }
 
     clusteringGroups = distances(counterClusters, clusteringGroups, centralPoints);
 
-    let previousCentralPoints = copy(centralPoints, counterClusters);
-    let iterations = 0;
+    let previousCentralPoints = copy(centralPoints);
 
     while (true) {
-        iterations++;
-
-        centralPoints = newClusters(counterClusters, clusteringGroups, centralPoints);
+        newClusters(counterClusters, clusteringGroups, centralPoints);
         clusteringGroups = distances(counterClusters, clusteringGroups, centralPoints);
         if (isEqual(previousCentralPoints, centralPoints, counterClusters)) {
             break;
@@ -214,5 +210,5 @@ function bestClustering () {
         }
     }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawColors(bestClusters.counterClusters, bestClusters.clusteringGroups, bestClusters.centralPoints);
+    coloringClusters(bestClusters.counterClusters, bestClusters.clusteringGroups, bestClusters.centralPoints);
 }
