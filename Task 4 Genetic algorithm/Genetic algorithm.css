@@ -1,7 +1,7 @@
 #canvas {
     display: block;
     margin-top: -60px;
-    margin-left: 280px;
+    margin-left: 235px;
     border-radius: 25px;
     background-color: white;
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
@@ -14,7 +14,7 @@
 
 .inputCountClass {
     display: block;
-    margin: 70px auto;
+    margin: 28px auto;
     text-align: center;
     width: 800px;
     height: 150px;
