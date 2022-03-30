@@ -4,16 +4,16 @@ function addPointsInArray(x, y){ //запоминаем координаты т�
     coordinates.push({x:x, y:y});
 }
 
-distancesMatrix = [];
-
-for (let i = 0; i < coordinates.length; i++){
-    distancesMatrix[i] = [];
-}
+distancesMatrix = new Array(coordinates.length);
 
 function makeDistanceMatrix(){
-    for (let i = 0; i <= coordinates.length - 1; i++){
-        for (let k = i; k <= coordinates.length - 1; k++){
-            distancesMatrix[i][k] = ((coordinates[i].x - coordinates[k].x) ** 2 + (coordinates[i].y - coordinates[k].y) ** 2) ** 0.5;
+    for (let i = 0; i < coordinates.length; i++){
+        distancesMatrix[i] = new Array(coordinates.length);
+    }
+
+    for (let i = 0; i < coordinates.length; i++){
+        for (let j = 0; j < coordinates.length; j++){
+            distancesMatrix[i][j] = ((coordinates[i].x - coordinates[j].x) ** 2 + (coordinates[i].y - coordinates[j].y) ** 2) ** 0.5;
         }
     }
 }
@@ -24,33 +24,35 @@ const Q = 4;
 const p = 0.4;
 const maxTime = 1000; // кол-во итераций
 
-antsCount = coordinates.length; // кол-во муравьев берем равным кол-ву городов
-
-pheromones = [];
-
-for (let i = 0; i < coordinates.length; i++){
-    pheromones[i] = [];
-}
+pheromones = new Array(coordinates.length);
 
 function getStartPheromones(){ //начальное значение феромонов
-    for (let i = 0; i <= antsCount - 1; i++){
-        for (let j = 0; j <= antsCount - 1; j++){
+    for (let i = 0; i < coordinates.length; i++){
+        pheromones[i] = new Array(coordinates.length);
+    }
+
+    for (let i = 0; i < coordinates.length; i++){
+        for (let j = 0; j < coordinates.length; j++){
             pheromones[i][j] = 0.2;
         }
     }
 }
 
-proximity = [];
-
-for (let i = 0; i < coordinates.length; i++){
-    proximity[i] = [];
-}
+proximity = new Array(coordinates.length);
 
 function getProximity(){ //значения "близости" между городами
-    for (let i = 0; i <= antsCount - 1; i++){
-        for (let j = 0; j <= antsCount - 1; j++){
-            if (i != j){
+    for (let i = 0; i < coordinates.length; i++){
+        proximity[i] = new Array(coordinates.length);
+    }
+
+    for (let i = 0; i < coordinates.length; i++){
+        for (let j = 0; j < coordinates.length; j++){
+            if (i !== j){
             proximity[i][j] = 1 / distancesMatrix[i][j];
+            }
+
+            else {
+                proximity[i][j] = 0;
             }
         }
     }
@@ -63,7 +65,7 @@ function getWish(i, j){ //желание перехода из вершины i 
 function sumWishes(i) { //вычисление суммы желаний попасть во все доступные вершины из i (для расчета вероятности)
     let sum = 0;
 
-    for (let j = 0; j < antsCount; j++){
+    for (let j = 0; j < coordinates.length; j++){
         if (j != i){
             sum += getWish(i, j);
         }
@@ -92,8 +94,8 @@ function chooseNextCity(i, visited){ //муравей из города i выб
         numberOfCity : []
     }
 
-    for (let j = 0; j < antsCount; j++){
-        if ((j != i) && ((isVisited(j, visited)) == false)) {
+    for (let j = 0; j < coordinates.length; j++){
+        if ((j !== i) && ((isVisited(j, visited)) === false)) {
             probabilityArray.probability.push(getProbability(i, j));
             probabilityArray.numberOfCity.push(j);
         }
@@ -127,11 +129,13 @@ function newPheromone(i, j, sumDeltaPheromone){ // обновление феро
 
 function antsAlgorithm(){
     makeDistanceMatrix();
-    getStartPheromones();
     getProximity();
+    getStartPheromones();
 
+    let antsCount = coordinates.length; // кол-во муравьев берем равным кол-ву городов
     let currentShortestPath = [];
     let currentMinLenght = 0;
+
 
     for (let t = 1; t <= maxTime; t++){ //цикл по кол-ву итераций
         let allAntsPaths  = {
@@ -139,9 +143,9 @@ function antsAlgorithm(){
             pathLength : []
         }
 
-        for (let i = 0; i < antsCount; i++){
-            allAntsPaths[i].path = [];
-        }
+        //for (let i = 0; i < antsCount; i++){
+            //allAntsPaths[i].path = [];
+        //}
 
         let sumDeltaPheromone = [];
 
@@ -171,6 +175,10 @@ function antsAlgorithm(){
             visited.push(startCityNumber);
 
             currentLenght += distancesMatrix[nextCity - 1][startCityNumber - 1];
+
+            for (let i = 0; i < antsCount; i++){
+                allAntsPaths[i].path = [];
+            }
 
             allAntsPaths.path.push(visited);
             allAntsPaths.pathLength.push(currentLenght);
@@ -218,11 +226,11 @@ function drawLines(){ //соединяем города из пути комми
 
 }
 
-function test(){
+function test() {
     var canvas = document.getElementById("fieldForPoints");
     var context = canvas.getContext('2d');
 
-    for (let i = 0; i <= coordinates.length - 2; i++){
+    for (let i = 0; i <= coordinates.length - 2; i++) {
         context.beginPath();
         context.lineWidth = 2;
         context.strokeStyle = 'black';
