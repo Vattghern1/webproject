@@ -14,15 +14,27 @@
         var canvas = document.getElementById("fieldForPoints");
         var context = canvas.getContext('2d');
 
+        number = 1;
+
     </script>
+    <div id='placeForText'></div>
     <div>
         <button id="button1" onclick="canvas.addEventListener('mousedown', function (e) {
             context.beginPath();
             context.arc(e.clientX - 710, e.clientY - 30, 10, 0, Math.PI * 2);
-            context.fillStyle = 'red';
+            context.fillStyle = 'white';
             context.fill();
+            context.strokeStyle = 'black'
+            context.stroke();
 
             addPointsInArray(e.clientX - 710, e.clientY - 30);
+
+            context.fillStyle = '#00F';
+            context.strokeStyle = '#F00';
+            context.font = '25px Verdana';
+            context.fillText(number,e.clientX - 720 , e.clientY - 43);
+            context.font = 'bold 10px sans-serif';
+            number++;
 
         });" >Добавить точки</button>
     </div>

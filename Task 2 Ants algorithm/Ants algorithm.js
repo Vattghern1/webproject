@@ -16,11 +16,11 @@ function makeDistanceMatrix(distancesMatrix){
     }
 }
 
-const alpha = 2; // задаем коэффициенты
-const beta = 3;
+const alpha = 1; // задаем коэффициенты
+const beta = 4;
 const Q = 4;
 const p = 0.4;
-const maxTime = 250; // кол-во итераций
+const maxTime = 50; // кол-во итераций
 
 function getStartPheromones(pheromones){ //начальное значение феромонов
     for (let i = 0; i < coordinates.length; i++){
@@ -140,16 +140,11 @@ function antsAlgorithm(){
     let currentShortestPath = [];
     let currentMinLenght = 10000;
 
-
     for (let t = 1; t <= maxTime; t++){ //цикл по кол-ву итераций
         let allAntsPaths  = {
             path : [],
             pathLength : []
         }
-
-        //for (let i = 0; i < antsCount; i++){
-            //allAntsPaths[i].path = [];
-        //}
 
         let sumDeltaPheromone = [];
 
@@ -179,10 +174,6 @@ function antsAlgorithm(){
             visited.push(startCityNumber);
 
             currentLenght += distancesMatrix[nextCity - 1][startCityNumber - 1];
-
-            //for (let i = 0; i < antsCount; i++){
-                //allAntsPaths.path[i] = [];
-            //}
 
             allAntsPaths.path.push(visited);
             allAntsPaths.pathLength.push(currentLenght);
@@ -218,8 +209,8 @@ function drawLines(){ //соединяем города из пути комми
 
     for (let i = 0; i <= path.length - 2; i++){
         context.beginPath();
-        context.lineWidth = 2;
-        context.strokeStyle = 'black';
+        context.lineWidth = 4;
+        context.strokeStyle = 'green';
         context.moveTo(coordinates[path[i] - 1].x, coordinates[path[i] - 1].y);
         context.lineTo(coordinates[path[i + 1] - 1].x, coordinates[path[i + 1] - 1].y);
         context.stroke();
@@ -230,6 +221,7 @@ function drawLines(){ //соединяем города из пути комми
 function clearing(){
     context.clearRect(0, 0, canvas.width, canvas.height);
     coordinates = [];
+    number = 1;
 }
 
 
