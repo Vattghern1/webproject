@@ -16,11 +16,11 @@ function makeDistanceMatrix(distancesMatrix){
     }
 }
 
-const alpha = 1; // задаем коэффициенты
-const beta = 1;
+const alpha = 2; // задаем коэффициенты
+const beta = 3;
 const Q = 4;
 const p = 0.4;
-const maxTime = 1000; // кол-во итераций
+const maxTime = 250; // кол-во итераций
 
 function getStartPheromones(pheromones){ //начальное значение феромонов
     for (let i = 0; i < coordinates.length; i++){
@@ -214,9 +214,6 @@ function antsAlgorithm(){
 }
 
 function drawLines(){ //соединяем города из пути коммивояжера линиями
-    var canvas = document.getElementById("fieldForPoints");
-    var context = canvas.getContext('2d');
-
     let path = antsAlgorithm();
 
     for (let i = 0; i <= path.length - 2; i++){
@@ -228,6 +225,11 @@ function drawLines(){ //соединяем города из пути комми
         context.stroke();
     }
 
+}
+
+function clearing(){
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    coordinates = [];
 }
 
 
