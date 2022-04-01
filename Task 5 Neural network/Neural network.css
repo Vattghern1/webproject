@@ -2,9 +2,10 @@
     display: block;
     margin-top: -60px;
     margin-left: 235px;
-    border-radius: 25px;
+
     background-color: white;
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
+
 }
 
 .bodyClass {
