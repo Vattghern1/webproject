@@ -2,6 +2,8 @@ let index = 0;
 let startBlock = 0;
 let endBlock = 0;
 let mapSize = 0;
+let lastBegin = 0;
+let lastEnd = 0;
 let openList = [];
 let closeList = [];
 let matrix = [];
@@ -32,6 +34,7 @@ function deleteFiles() {
     openList = [];
     closeList = [];
     breakFlag = false;
+    matrixLab.splice(0,matrixLab.length);
 }
 
 //Отчистка карты
