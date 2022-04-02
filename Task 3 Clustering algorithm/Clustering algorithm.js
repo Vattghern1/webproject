@@ -109,8 +109,8 @@ function distances(counterClusters, clusteringGroups, centralPoints) {
     for(let i = 0; i < counterPoints; i++) {
         let minLength = Infinity;
         let minClusterNum;
-        for(var j = 0; j < counterClusters; j++) {
-            var tempLength = Math.sqrt(Math.pow((centralPoints.x[j]-coords.x[i]),2) + Math.pow((centralPoints.y[j]-coords.y[i]),2));
+        for(let j = 0; j < counterClusters; j++) {
+            let tempLength = Math.sqrt(Math.pow((centralPoints.x[j]-coords.x[i]),2) + Math.pow((centralPoints.y[j]-coords.y[i]),2));
             if (tempLength < minLength) {
                 minLength = tempLength;
                 minClusterNum = j;
@@ -156,6 +156,43 @@ function isEqual(firstObj, secObj, counter) {
     return true;
 }
 
+function kMeansPlusPlus(counterClusters, centralPoints) {
+    let tempRand = random(counterPoints);
+    centralPoints.x[0] = coords.x[tempRand];
+    centralPoints.y[0] = coords.y[tempRand];
+    for(let i = 1; i < counterClusters; i++) {
+        let sumDistances = 0;
+        for(let j = 0; j < counterPoints; j++) {
+            let minDist = Infinity;
+            for(let k = 0; k < centralPoints.x.length; k++) {
+                let tempLength = Math.pow((centralPoints.x[k]-coords.x[j]),2) + Math.pow((centralPoints.y[k]-coords.y[j]),2);
+                if (tempLength < minDist) {
+                    minDist = tempLength;
+                }
+            }
+            sumDistances += minDist;
+        }
+        let randSum = random(sumDistances);
+        sumDistances = 0;
+        for(let j = 0; j < counterPoints; j++) {
+            let minDist = Infinity;
+            for(let k = 0; k < centralPoints.x.length; k++) {
+                let tempLength = Math.pow((centralPoints.x[k]-coords.x[j]),2) + Math.pow((centralPoints.y[k]-coords.y[j]),2);
+                if (tempLength < minDist) {
+                    minDist = tempLength;
+                }
+            }
+            sumDistances += minDist;
+            if (sumDistances > randSum) {
+                centralPoints.x[i] = coords.x[j];
+                centralPoints.y[i] = coords.y[j];
+                break;
+            }
+        }
+    }
+    return centralPoints;
+}
+
 //the main clustering function:
 function clustering() {
     let counterClusters = document.getElementById("counterClusters").value;
@@ -165,11 +202,7 @@ function clustering() {
     }
     let clusteringGroups = [];
 
-    for(let i = 0; i < counterClusters; i++) {
-        clusteringGroups[i] = [];
-        centralPoints.x[i] = random(canvas.width);
-        centralPoints.y[i] = random(canvas.height);
-    }
+    centralPoints = kMeansPlusPlus(counterClusters, centralPoints);
 
     clusteringGroups = distances(counterClusters, clusteringGroups, centralPoints);
 
@@ -195,7 +228,7 @@ function clustering() {
 function bestClustering () {
     let minDistance = Infinity;
     let bestClusters;
-    for(let i = 0; i < 100; i++) {
+    for(let i = 0; i < 10; i++) {
         let tempDistance = 0;
         let resultClustering = clustering();
         for(let j = 0; j < resultClustering.counterClusters; j++) {
