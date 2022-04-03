@@ -143,7 +143,12 @@ function newClusters(counterClusters, clusteringGroups, centralPoints) {
 
 //function to copy objects:
 function copy(obj) {
-    return obj;
+    let copyObj = {
+        x : obj.x,
+        y : obj.y
+    }
+
+    return copyObj;
 }
 
 //function to check two objects for equality:
@@ -207,14 +212,14 @@ function clustering() {
     clusteringGroups = distances(counterClusters, clusteringGroups, centralPoints);
 
     let previousCentralPoints = copy(centralPoints);
-
+    
     while (true) {
         newClusters(counterClusters, clusteringGroups, centralPoints);
         clusteringGroups = distances(counterClusters, clusteringGroups, centralPoints);
         if (isEqual(previousCentralPoints, centralPoints, counterClusters)) {
             break;
         } else {
-            previousCentralPoints = copy(centralPoints, counterClusters);
+            previousCentralPoints = copy(centralPoints);
         }
     }
     return {

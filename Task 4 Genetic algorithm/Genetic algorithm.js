@@ -83,16 +83,81 @@ function permute(points, memo) {
     return results;
 }
 
-function crossing(firstParent, secondParent) {
+function copy(obj) {
+    return obj;
+}
 
+function crossing(firstParent, secondParent) {
+    let copyFirstParent = copy(firstParent);
+    let copySecParent = copy(secondParent);
+    let pointGap = random(counterPoints - 2);
+    let child1 = [];
+    let child2 = [];
+    for(let i = 0; i <= pointGap; i++) {
+        child1.push(firstParent[i]);
+        for(let j = 0; j < counterPoints; j++) {
+            if (secondParent[j] == firstParent[i]) {
+                copySecParent[j] = -1;
+            }
+        }
+    }
+    for(let i = pointGap + 1; i < counterPoints; i++) {
+        if (copySecParent[i] != -1) {
+            child1.push(copySecParent[i]);
+            for(let j = 0; j < counterPoints; j++) {
+                if (copySecParent[i] == firstParent[j]) {
+                    copyFirstParent[j] = -1;
+                }
+            }
+        }
+    }
+    if (child1.length < counterPoints) {
+        for(let i = pointGap+1; i < counterPoints; i++) {
+            if ((copyFirstParent[i] != -1) && (child1.length < counterPoints)) {
+                child1.push(firstParent[i]);
+            }
+        }
+    }
+
+    copyFirstParent = copy(firstParent);
+    copySecParent = copy(secondParent);
+
+    for(let i = 0; i <= pointGap; i++) {
+        child2.push(secondParent[i]);
+        for(let j = 0; j < counterPoints; j++) {
+            if (firstParent[j] == secondParent[i]) {
+                copyFirstParent[j] = -1;
+            }
+        }
+    }
+    for(let i = pointGap + 1; i < counterPoints; i++) {
+        if (copyFirstParent[i] != -1) {
+            child2.push(copyFirstParent[i]);
+            for(let j = 0; j < counterPoints; j++) {
+                if (copyFirstParent[i] == secondParent[j]) {
+                    copySecParent[j] = -1;
+                }
+            }
+        }
+    }
+    if (child2.length < counterPoints) {
+        for(let i = pointGap+1; i < counterPoints; i++) {
+            if ((copySecParent[i] != -1) && (child2.length < counterPoints)) {
+                child2.push(secondParent[i]);
+            }
+        }
+    }
+
+    return {
+        child1 : child1,
+        child2 : child2
+    };
 }
 
 function geneticAlg() {
     fullMatrix();
     let generations = permute(points);
-    merge_sort(generations, generations.length);
-    console.log(generations);
-    for(let i = 0; i < 1800; i++) {
+    for(let i = 0; i < 1; i++) {
         let firstParent = random(counterPoints);
         let secondParent = random(counterPoints);
         if (secondParent == firstParent) {
@@ -100,6 +165,8 @@ function geneticAlg() {
                 secondParent = random(counterPoints);
             }
         }
+        let children = crossing(generations[firstParent], generations[secondParent])
+        console.log(children);
 
     }
 
@@ -112,34 +179,6 @@ function clearing() {
     distMatrix = [];
     counterPoints = 0;
     points = [];
+    results = [];
 }
 
-function merge(arr, left, mid, right, drr) {
-    let i = left;
-    let j = mid+1;
-    for (let k = left; k <= right; k++) {
-        if (j > right) drr[k] = arr[i++];
-        else if (i > mid) drr[k] = arr[j++];
-        else if (arr[i][counterPoints] <= arr[j][counterPoints]) drr[k]=arr[i++];
-        else drr[k] = arr[j++];
-    }
-}
-
-function merge_rec(arr, left, right, drr) {
-    let mid = (left+right)/2;
-    if (left<mid) {
-        merge_rec(arr, left, mid, drr);
-    }
-    if (right>mid) {
-        merge_rec(arr,mid+1, right, drr);
-    }
-    merge(arr,left,mid,right,drr);
-    for(let i = left; i <= right; i++) {
-        arr[i] = drr[i];
-    }
-}
-
-function merge_sort(arr, n) {
-    let d = [];
-    merge_rec(arr,0,n-1, d);
-}
