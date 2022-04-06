@@ -17,6 +17,10 @@ var coords = {
 var distMatrix = [];
 var counterPoints = 0;
 var points = [];
+var results = [];
+const generationMax = 400;
+var generationCounter = 0;
+const mutationPercent = 50;
 
 function drawArc(x, y) {
     ctx.beginPath();
@@ -43,10 +47,6 @@ function fullMatrix () {
     }
 }
 
-var results = [];
-const generationMax = 400;
-var generationCounter = 0;
-
 function findDistancesSum(arrayPoints) {
     let tempSum = 0;
     for(let j = 0; j < counterPoints-1; j++) {
@@ -62,7 +62,7 @@ function random(maxVal) {
 function permute(points, memo) {
     let cur;
 
-    var memo = memo || [];
+    memo = memo || [];
 
     for (let i = 0; i < points.length; i++) {
         cur = points.splice(i, 1);
@@ -84,28 +84,34 @@ function permute(points, memo) {
 }
 
 function copy(obj) {
-    return obj;
+    let copyObj = [];
+    for(let i = 0; i < counterPoints-1; i++) {
+        copyObj[i] = obj[i];
+    }
+    return copyObj;
 }
 
 function crossing(firstParent, secondParent) {
-    let copyFirstParent = copy(firstParent);
-    let copySecParent = copy(secondParent);
+
     let pointGap = random(counterPoints - 2);
     let child1 = [];
     let child2 = [];
+
+    let copyFirstParent = copy(firstParent);
+    let copySecParent = copy(secondParent);
     for(let i = 0; i <= pointGap; i++) {
         child1.push(firstParent[i]);
-        for(let j = 0; j < counterPoints; j++) {
-            if (secondParent[j] == firstParent[i]) {
+        for (let j = 0; j < counterPoints; j++) {
+            if (firstParent[i] == secondParent[j]) {
                 copySecParent[j] = -1;
             }
         }
     }
-    for(let i = pointGap + 1; i < counterPoints; i++) {
+    for(let i = pointGap+1; i < counterPoints; i++) {
         if (copySecParent[i] != -1) {
-            child1.push(copySecParent[i]);
+            child1.push(secondParent[i]);
             for(let j = 0; j < counterPoints; j++) {
-                if (copySecParent[i] == firstParent[j]) {
+                if (secondParent[i] == firstParent[j]) {
                     copyFirstParent[j] = -1;
                 }
             }
@@ -121,20 +127,19 @@ function crossing(firstParent, secondParent) {
 
     copyFirstParent = copy(firstParent);
     copySecParent = copy(secondParent);
-
     for(let i = 0; i <= pointGap; i++) {
         child2.push(secondParent[i]);
-        for(let j = 0; j < counterPoints; j++) {
-            if (firstParent[j] == secondParent[i]) {
+        for (let j = 0; j < counterPoints; j++) {
+            if (secondParent[i] == firstParent[j]) {
                 copyFirstParent[j] = -1;
             }
         }
     }
-    for(let i = pointGap + 1; i < counterPoints; i++) {
+    for(let i = pointGap+1; i < counterPoints; i++) {
         if (copyFirstParent[i] != -1) {
-            child2.push(copyFirstParent[i]);
+            child2.push(firstParent[i]);
             for(let j = 0; j < counterPoints; j++) {
-                if (copyFirstParent[i] == secondParent[j]) {
+                if (firstParent[i] == secondParent[j]) {
                     copySecParent[j] = -1;
                 }
             }
@@ -148,28 +153,76 @@ function crossing(firstParent, secondParent) {
         }
     }
 
+    child1.push(findDistancesSum(child1));
+    child2.push(findDistancesSum(child2));
+
     return {
         child1 : child1,
         child2 : child2
-    };
+    }
+}
+
+function BubbleSort(array) {
+    let n = array.length;
+    for (let i = 0; i < n-1; i++) {
+        for (let j = 0; j < n-1-i; j++) {
+            if (array[j+1][counterPoints] < array[j][counterPoints]) {
+                let t = array[j+1];
+                array[j+1] = array[j];
+                array[j] = t;
+            }
+        }
+    }
+}
+
+//возможно ошибка с присвоением переменных
+function mutation(child) {
+    if (random(100) < mutationPercent) {
+        let firstRandInd = random(100);
+        let secRandInd = random(100);
+        let temp = child[firstRandInd];
+        child[firstRandInd] = child[secRandInd];
+        child[secRandInd] = temp;
+        child[counterPoints] = findDistancesSum(child);
+    }
+}
+
+function drawPath(path) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.beginPath();
+    ctx.moveTo(coords.x[path[0]], coords.y[path[0]]);
+    for(let i = 1; i < counterPoints; i++) {
+        ctx.lineTo(coords.x[path[i]], coords.y[path[i]]);
+    }
+    ctx.lineTo(coords.x[path[0]], coords.y[path[0]]);
+    ctx.stroke();
+    for(let i = 0; i < counterPoints; i++) {
+        drawArc(coords.x[i], coords.y[i]);
+    }
 }
 
 function geneticAlg() {
     fullMatrix();
     let generations = permute(points);
-    for(let i = 0; i < 1; i++) {
-        let firstParent = random(counterPoints);
-        let secondParent = random(counterPoints);
+    for(let i = 0; i < 5; i++) {
+        let firstParent = random(generations.length);
+        let secondParent = random(generations.length);
         if (secondParent == firstParent) {
             while(secondParent == firstParent) {
                 secondParent = random(counterPoints);
             }
         }
-        let children = crossing(generations[firstParent], generations[secondParent])
-        console.log(children);
-
+        let children = crossing(generations[firstParent], generations[secondParent]);
+        mutation(children.child1);
+        mutation(children.child2);
+        generations.push(children.child1);
+        generations.push(children.child2);
+        BubbleSort(generations);
+        for(let j = 0; j < 2; j++) {
+            generations.pop();
+        }
+        drawPath(generations[0]);
     }
-
 }
 
 function clearing() {
@@ -180,5 +233,6 @@ function clearing() {
     counterPoints = 0;
     points = [];
     results = [];
+    generationCounter = 0;
 }
 

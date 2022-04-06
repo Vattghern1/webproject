@@ -212,7 +212,7 @@ function clustering() {
     clusteringGroups = distances(counterClusters, clusteringGroups, centralPoints);
 
     let previousCentralPoints = copy(centralPoints);
-    
+
     while (true) {
         newClusters(counterClusters, clusteringGroups, centralPoints);
         clusteringGroups = distances(counterClusters, clusteringGroups, centralPoints);
