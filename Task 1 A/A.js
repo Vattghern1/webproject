@@ -70,7 +70,7 @@ function createMap(){
                 endBlock = td;
                 td.style.backgroundColor = "red";
             }
-            td.setAttribute("onclick", "checkerButtons(this)");
+            td.setAttribute("onclick", 'checkerButtons(this)');
             td.setAttribute("id", j+" - "+i)
             tr.appendChild(td);
         }
@@ -81,27 +81,27 @@ function createMap(){
 
 //Работа кнопок
 function chooseWallBeginEnd(valueSelectedButton) {
-    const divButton = document.getElementById("selectButton");
+    const divButtons = document.getElementById("buttons");
     switch (valueSelectedButton) {
         case "Begin":
-            divButton.setAttribute("value", "Begin");
+            divButtons.setAttribute("value", "Begin");
             break;
         case "End":
-            divButton.setAttribute("value", "End");
+            divButtons.setAttribute("value", "End");
             break;
         case "Wall":
-            divButton.setAttribute("value", "Wall");
+            divButtons.setAttribute("value", "Wall");
             break;
         case "deleteWall":
-            divButton.setAttribute("value", "deleteWall");
+            divButtons.setAttribute("value", "deleteWall");
             break;
     }
 }
 
 function checkerButtons(block) {
-    const divButton = document.getElementById("selectButton");
-    let countSelectedButton = divButton.getAttribute("value");
-    switch (countSelectedButton) {
+    const divButtons = document.getElementById("button");
+    let valueButtons = divButtons.getAttribute("value");
+    switch (valueButtons) {
         case "Begin":
             setBegin(block);
             break;

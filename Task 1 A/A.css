@@ -7,13 +7,15 @@ body{
     margin-left: 3%;
 }
 
-.sidebar {
-    font-family: Montserrat SemiBold;
+.buttons {
+    font-family: Montserrat SemiBold, serif;
     font-size: 30px;
+    margin-top: 50px;
+    margin-right: 2000px;
 }
 
 .inputSize {
-    font-family: Montserrat SemiBold;
+    font-family: Montserrat SemiBold, serif;
     font-size: 40px;
 }
 
@@ -23,7 +25,7 @@ body{
     border-radius: 30px;
     font-size: 30px;
     text-align: center;
-    font-family: Montserrat SemiBold;
+    font-family: Montserrat SemiBold, serif;
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 
@@ -48,7 +50,7 @@ button {
     color: white;
     border-radius: 10px;
     font-size: 25px;
-    font-family: Montserrat SemiBold;
+    font-family: Montserrat SemiBold, serif;
     background-color: #800000;
 }
 
