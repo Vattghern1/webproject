@@ -19,13 +19,12 @@ class blockCoordinates {
 }
 
 class oneBlock {
-    constructor(value, F, G, H, parentX, parentY) {
+    constructor(value, F, G, H, parent) {
         this.value = value;
         this.G = G;
         this.H = H;
         this.F = F;
-        this.parentX = parentX;
-        this.parentY = parentY;
+        this.parent = parent;
     }
 }
 
@@ -43,9 +42,6 @@ function clearMap() {
     startBlock = document.getElementById(0+" - "+0);
     endBlock = document.getElementById((mapSize-1)+" - "+(mapSize-1));
 }
-document.addEventListener("DOMContentLoader", () => {
-    createMap();
-});
 
 //Создание карты
 function createMap(){
@@ -152,7 +148,6 @@ function setBegin(block) {
 
 //Создание матрицы
 function createMatrix() {
-    matrix = new Array(mapSize);
     for (let i = 0; i < mapSize; i++) {
         matrix[i] = new Array(mapSize);
         for (let j = 0; j < mapSize; j++) {
@@ -171,9 +166,11 @@ function updateMatrix() {
                     break;
                 case "green":
                     startBlock = new blockCoordinates(i, j);
+                    matrix[i][j].value = 0;
                     break;
                 case "red":
                     endBlock = new blockCoordinates(i, j);
+                    matrix[i][j].value = 0;
                     break;
                 default:
                     matrix[i][j].value = 0;
@@ -300,9 +297,6 @@ function drawMaze() {
 //Алгоритм А*
 async function findPath() {
     updateMatrix();
-    let temp;
-    let tempX = endBlock.x;
-    let tempY = endBlock.y;
     openList.push(startBlock);
     while (!breakFlag) {
         let minBlock = minBlockF();
@@ -317,12 +311,18 @@ async function findPath() {
         await new Promise(resolve => setTimeout(resolve, 15))
     }
 
-    while (tempX !== startBlock.x || tempY !== startBlock.y) {
-        tempX = matrix[tempX][tempY].parentX;
-        tempY = matrix[tempX][tempY].parentY;
-        temp = document.getElementById(tempX+" - "+tempY);
-        if (temp !== startBlock) {
-            temp.style.backgroundColor = "pink";
+    await drawPath();
+    deleteFilesAStar();
+}
+
+async function drawPath() {
+    let temp = endBlock;
+    let checkDraw = 0;
+    while (temp !== startBlock) {
+        temp = matrix[temp.x][temp.y].parent;
+        checkDraw = document.getElementById((temp.x)+" - "+(temp.y));
+        if (checkDraw.style.backgroundColor !== "green") {
+            checkDraw.style.backgroundColor = "pink";
         }
         await new Promise(resolve => setTimeout(resolve, 15))
     }
@@ -333,11 +333,12 @@ async function findPath() {
 function deleteFilesAStar () {
     index = 0;
     breakFlag = false;
+    counterOfNeighbours = 0;
     openList.length = 0;
     closeList.length = 0;
-    matrixLab.length = 0;
     arrayOfNeighbours.length = 0;
-    counterOfNeighbours = 0;
+    matrix.length = 0;
+    matrixLab.length = 0;
 }
 
 function minBlockF() {
@@ -403,24 +404,18 @@ function currentBlockNeighbours(current) {
 
     for (let i = 0; i < counterOfNeighbours; i++) {
         let neighbour = arrayOfNeighbours[i];
+        matrix[neighbour.x][neighbour.y].parent = current;
         matrix[neighbour.x][neighbour.y].G = 10 + matrix[current.x][current.y].G;
+        matrix[neighbour.x][neighbour.y].F = matrix[neighbour.x][neighbour.y].H + matrix[neighbour.x][neighbour.y].G;
         if (!checkOpenedList(neighbour)) {
             openList.push(neighbour);
-            matrix[neighbour.x][neighbour.y].parentX = current.x;
-            matrix[neighbour.x][neighbour.y].parentY = current.y;
             matrix[neighbour.x][neighbour.y].H = distanceBetweenBlocks(neighbour, startBlock);
-            matrix[neighbour.x][neighbour.y].F = matrix[neighbour.x][neighbour.y].H + matrix[neighbour.x][neighbour.y].G;
             if (neighbour.x === endBlock.x && neighbour.y === endBlock.y) {
                 breakFlag = true;
                 return 0;
             }
             temp = document.getElementById(neighbour.x + " - " + neighbour.y);
             temp.style.backgroundColor = "blue";
-        }
-        else if (matrix[neighbour.x][neighbour.y].G > matrix[current.x][current.y].G) {
-            matrix[neighbour.x][neighbour.y].parentX = current.x;
-            matrix[neighbour.x][neighbour.y].parentY = current.y;
-            matrix[neighbour.x][neighbour.y].F = matrix[neighbour.x][neighbour.y].H + matrix[neighbour.x][neighbour.y].G;
         }
     }
 
