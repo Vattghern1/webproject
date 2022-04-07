@@ -3,10 +3,12 @@ let startBlock = 0;
 let endBlock = 0;
 let mapSize = 0;
 let labSize = 0;
+let counterOfNeighbours = 0;
 let openList = [];
 let closeList = [];
 let matrix = [];
 let matrixLab = [];
+let arrayOfNeighbours = [];
 let breakFlag = false;
 
 class blockCoordinates {
@@ -41,6 +43,9 @@ function clearMap() {
     startBlock = document.getElementById(0+" - "+0);
     endBlock = document.getElementById((mapSize-1)+" - "+(mapSize-1));
 }
+document.addEventListener("DOMContentLoader", () => {
+    createMap();
+});
 
 //Создание карты
 function createMap(){
@@ -103,7 +108,7 @@ function chooseWallBeginEnd(valueSelectedButton) {
 }
 
 function checkerButtons(block) {
-    const divButtons = document.getElementById("button");
+    const divButtons = document.getElementById("buttons");
     let valueButtons = divButtons.getAttribute("value");
     switch (valueButtons) {
         case "Begin":
@@ -331,6 +336,8 @@ function deleteFilesAStar () {
     openList.length = 0;
     closeList.length = 0;
     matrixLab.length = 0;
+    arrayOfNeighbours.length = 0;
+    counterOfNeighbours = 0;
 }
 
 function minBlockF() {
@@ -368,97 +375,55 @@ function checkClosedList(temp) {
     return false;
 }
 
-function currentBlockNeighbours(current) {
+function createArrayOfNeighbours(current) {
     let x = current.x;
     let y = current.y;
-    let temp = 0;
-
-    if (y - 1 >= 0 && matrix[x][y - 1].value !== 1 && !checkClosedList(new blockCoordinates(x, y - 1))) {
-        if (!checkOpenedList(new blockCoordinates(x, y - 1))) {
-            openList.push(new blockCoordinates(x, y - 1));
-            matrix[x][y - 1].parentX = x;
-            matrix[x][y - 1].parentY = y;
-            matrix[x][y - 1].H = distanceBetweenBlocks(new blockCoordinates(x, y - 1), startBlock);
-            matrix[x][y - 1].G = 10 + matrix[x][y].G;
-            matrix[x][y - 1].F = matrix[x][y - 1].H + matrix[x][y - 1].G;
-            if (x === endBlock.x && y - 1 === endBlock.y) {
-                breakFlag = true;
-                return 0;
-            }
-            temp = document.getElementById(x+" - "+(y-1));
-            temp.style.backgroundColor = "blue";
-        }
-        else if (matrix[x][y - 1].G > matrix[x][y].G) {
-            matrix[x][y - 1].parentX = x;
-            matrix[x][y - 1].parentY = y;
-            matrix[x][y - 1].G = 10 + matrix[x][y].G;
-            matrix[x][y - 1].F = matrix[x][y - 1].H + matrix[x][y - 1].G;
-        }
-    }
-    if (y + 1 < mapSize && matrix[x][y + 1].value !== 1 && !checkClosedList(new blockCoordinates(x, y + 1))) {
-        if (!checkOpenedList(new blockCoordinates(x, y + 1))) {
-            openList.push(new blockCoordinates(x, y + 1));
-            matrix[x][y + 1].parentX = x;
-            matrix[x][y + 1].parentY = y;
-            matrix[x][y + 1].H = distanceBetweenBlocks(new blockCoordinates(x, y + 1), endBlock);
-            matrix[x][y + 1].G = 10 + matrix[x][y].G;
-            matrix[x][y + 1].F = matrix[x][y + 1].H + matrix[x][y + 1].G;
-            if (x === endBlock.x && y + 1 === endBlock.y) {
-                breakFlag = true;
-                return 0;
-            }
-            temp = document.getElementById(x+" - "+(y+1));
-            temp.style.backgroundColor = "blue";
-        }
-        else if (matrix[x][y + 1].G > matrix[x][y].G) {
-            matrix[x][y + 1].parentX = x;
-            matrix[x][y + 1].parentY = y;
-            matrix[x][y + 1].G = 10 + matrix[x][y].G;
-            matrix[x][y + 1].F = matrix[x][y + 1].H + matrix[x][y + 1].G;
-        }
-    }
     if (x - 1 >= 0 && matrix[x - 1][y].value !== 1 && !checkClosedList(new blockCoordinates(x - 1, y))) {
-        if (!checkOpenedList(new blockCoordinates(x - 1, y))) {
-            openList.push(new blockCoordinates(x - 1, y));
-            matrix[x - 1][y].parentX = x;
-            matrix[x - 1][y].parentY = y;
-            matrix[x - 1][y].H = distanceBetweenBlocks(new blockCoordinates(x - 1, y), endBlock);
-            matrix[x - 1][y].G = 10 + matrix[x][y].G;
-            matrix[x - 1][y].F = matrix[x - 1][y].H + matrix[x - 1][y].G;
-            if (x - 1 === endBlock.x && y === endBlock.y) {
-                breakFlag = true;
-                return 0;
-            }
-            temp = document.getElementById(x-1+" - "+y);
-            temp.style.backgroundColor = "blue";
-        }
-        else if (matrix[y][x - 1].G > matrix[y][x].G) {
-            matrix[x - 1][y].parentX = x;
-            matrix[x - 1][y].parentY = y;
-            matrix[x - 1][y].G = 10 + matrix[x][y].G;
-            matrix[x - 1][y].F = matrix[x - 1][y].H + matrix[x - 1][y].G;
-        }
+        arrayOfNeighbours.push(new blockCoordinates(x - 1, y));
+        counterOfNeighbours++;
     }
     if (x + 1 < mapSize && matrix[x + 1][y].value !== 1 && !checkClosedList(new blockCoordinates(x + 1, y))) {
-        if (!checkOpenedList(new blockCoordinates(x + 1, y))) {
-            openList.push(new blockCoordinates(x + 1, y));
-            matrix[x + 1][y].parentX = x;
-            matrix[x + 1][y].parentY = y;
-            matrix[x + 1][y].H = distanceBetweenBlocks(new blockCoordinates(x + 1, y), endBlock);
-            matrix[x + 1][y].G = 10 + matrix[x][y].G;
-            matrix[x + 1][y].F = matrix[x + 1][y].H + matrix[x + 1][y].G;
-            if (x + 1 === endBlock.x && y === endBlock.y) {
+        arrayOfNeighbours.push(new blockCoordinates(x + 1, y));
+        counterOfNeighbours++;
+    }
+    if (y - 1 >= 0 && matrix[x][y - 1].value !== 1 && !checkClosedList(new blockCoordinates(x, y - 1))) {
+        arrayOfNeighbours.push(new blockCoordinates(x, y - 1));
+        counterOfNeighbours++;
+    }
+    if (y + 1 < mapSize && matrix[x][y + 1].value !== 1 && !checkClosedList(new blockCoordinates(x, y + 1))) {
+        arrayOfNeighbours.push(new blockCoordinates(x, y + 1));
+        counterOfNeighbours++;
+    }
+    return arrayOfNeighbours;
+}
+
+function currentBlockNeighbours(current) {
+    let temp;
+    arrayOfNeighbours = createArrayOfNeighbours(current);
+
+    for (let i = 0; i < counterOfNeighbours; i++) {
+        let neighbour = arrayOfNeighbours[i];
+        matrix[neighbour.x][neighbour.y].G = 10 + matrix[current.x][current.y].G;
+        if (!checkOpenedList(neighbour)) {
+            openList.push(neighbour);
+            matrix[neighbour.x][neighbour.y].parentX = current.x;
+            matrix[neighbour.x][neighbour.y].parentY = current.y;
+            matrix[neighbour.x][neighbour.y].H = distanceBetweenBlocks(neighbour, startBlock);
+            matrix[neighbour.x][neighbour.y].F = matrix[neighbour.x][neighbour.y].H + matrix[neighbour.x][neighbour.y].G;
+            if (neighbour.x === endBlock.x && neighbour.y === endBlock.y) {
                 breakFlag = true;
                 return 0;
             }
-            temp = document.getElementById(x+1+" - "+y);
+            temp = document.getElementById(neighbour.x + " - " + neighbour.y);
             temp.style.backgroundColor = "blue";
         }
-        else if (matrix[x + 1][y].G > matrix[x][y].G) {
-            matrix[x + 1][y].parentX = x;
-            matrix[x + 1][y].parentY = y;
-            matrix[x + 1][y].G = 10 + matrix[x][y].G;
-            matrix[x + 1][y].F = matrix[x + 1][y].H + matrix[x + 1][y].G;
+        else if (matrix[neighbour.x][neighbour.y].G > matrix[current.x][current.y].G) {
+            matrix[neighbour.x][neighbour.y].parentX = current.x;
+            matrix[neighbour.x][neighbour.y].parentY = current.y;
+            matrix[neighbour.x][neighbour.y].F = matrix[neighbour.x][neighbour.y].H + matrix[neighbour.x][neighbour.y].G;
         }
     }
+
+    arrayOfNeighbours.length = 0;
+    counterOfNeighbours = 0;
 }
