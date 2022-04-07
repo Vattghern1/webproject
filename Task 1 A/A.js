@@ -2,8 +2,7 @@ let index = 0;
 let startBlock = 0;
 let endBlock = 0;
 let mapSize = 0;
-let lastBegin = 0;
-let lastEnd = 0;
+let labSize = 0;
 let openList = [];
 let closeList = [];
 let matrix = [];
@@ -28,16 +27,7 @@ class oneBlock {
     }
 }
 
-//Очистка
-function deleteFiles() {
-    index = 0;
-    openList = [];
-    closeList = [];
-    breakFlag = false;
-    matrixLab.splice(0,matrixLab.length);
-}
-
-//Отчистка карты
+//Отчистка
 function clearMap() {
     let temp;
     for (let i = 0; i < mapSize; i++) {
@@ -48,14 +38,23 @@ function clearMap() {
             }
         }
     }
-    deleteFiles();
+    startBlock = (0,0);
+    endBlock = (0,0);
 }
 
 //Создание карты
 function createMap(){
     document.querySelector('tbody').innerHTML = '';
     mapSize = parseInt(document.getElementById('InputMapSize').value);
-    table = document.querySelector('tbody');
+    if (mapSize < 5) {
+        alert("Choose a larger size!")
+        return 0;
+    }
+    if (mapSize > 80) {
+        alert("Choose a smaller size!")
+        return 0;
+    }
+    const table = document.querySelector('tbody');
 
     for (let i = 0; i < mapSize; i++) {
         let tr = document.createElement('tr');
@@ -64,11 +63,11 @@ function createMap(){
             let td = document.createElement('td');
             td.classList.add("map-block");
             if (i === 0 && j === 0) {
-                lastBegin = td;
+                startBlock = td;
                 td.style.backgroundColor = "green";
             }
             if (i === mapSize-1 && j === mapSize-1) {
-                lastEnd = td;
+                endBlock = td;
                 td.style.backgroundColor = "red";
             }
             td.setAttribute("onclick", "checkerButtons(this)");
@@ -80,36 +79,9 @@ function createMap(){
     createMatrix();
 }
 
-//Создание матрицы
-function createMatrix() {
-    matrix = new Array(mapSize);
-    for (let i = 0; i < mapSize; i++) {
-        matrix[i] = new Array(mapSize);
-        for (let j = 0; j < mapSize; j++) {
-            matrix[i][j] = new oneBlock(0, 0, 0, 0, 0, 0);
-        }
-    }
-}
-
-function updateMatrix() {
-    for (let i = 0; i < mapSize; i++) {
-        for (let j = 0; j < mapSize; j++) {
-            if (document.getElementById(i+" - "+j).style.backgroundColor === "black") {
-                matrix[i][j].value = 1;
-            }
-            if (document.getElementById(i+" - "+j).style.backgroundColor === "green") {
-                startBlock = new blockCoordinates(i, j);
-            }
-            if (document.getElementById(i+" - "+j).style.backgroundColor === "red") {
-                endBlock = new blockCoordinates(i, j);
-            }
-        }
-    }
-}
-
 //Работа кнопок
 function chooseWallBeginEnd(valueSelectedButton) {
-    divButton = document.getElementById("selectButton");
+    const divButton = document.getElementById("selectButton");
     switch (valueSelectedButton) {
         case "Begin":
             divButton.setAttribute("value", "Begin");
@@ -127,15 +99,14 @@ function chooseWallBeginEnd(valueSelectedButton) {
 }
 
 function checkerButtons(block) {
+    const divButton = document.getElementById("selectButton");
     let countSelectedButton = divButton.getAttribute("value");
     switch (countSelectedButton) {
         case "Begin":
             setBegin(block);
-            lastBegin = block;
             break;
         case "End":
             setEnd(block);
-            lastEnd = block;
             break;
         case "Wall":
             setWall(block);
@@ -155,16 +126,56 @@ function setWall(block) {
 }
 
 function setEnd(block) {
-    lastEnd.style.backgroundColor = "white";
+    if (endBlock) {
+        endBlock.style.backgroundColor = "white";
+    }
     block.style.backgroundColor = "red";
     endBlock = block;
 }
 
 function setBegin(block) {
-    lastBegin.style.backgroundColor = "white";
+    if (startBlock) {
+        startBlock.style.backgroundColor = "white";
+    }
     block.style.backgroundColor = "green";
     startBlock = block;
 }
+
+//Создание матрицы
+function createMatrix() {
+    matrix = new Array(mapSize);
+    for (let i = 0; i < mapSize; i++) {
+        matrix[i] = new Array(mapSize);
+        for (let j = 0; j < mapSize; j++) {
+            matrix[i][j] = new oneBlock(0, 0, 0, 0, 0, 0);
+        }
+    }
+}
+
+function updateMatrix() {
+    for (let i = 0; i < mapSize; i++) {
+        for (let j = 0; j < mapSize; j++) {
+            let tempColor = document.getElementById(i+" - "+j).style.backgroundColor;
+            switch (tempColor) {
+                case "black":
+                    matrix[i][j].value = 1;
+                    break;
+                case "green":
+                    startBlock = new blockCoordinates(i, j);
+                    break;
+                case "red":
+                    endBlock = new blockCoordinates(i, j);
+                    break;
+                default:
+                    matrix[i][j].value = 0;
+                    break;
+
+            }
+        }
+    }
+}
+
+
 
 //Создание лабиринта
 const lastik = {
@@ -173,11 +184,12 @@ const lastik = {
 }
 
 function createLabyrinth() {
-    if (mapSize % 2 === 0) {
-        mapSize--;
+    labSize = mapSize;
+    if (labSize % 2 === 0) {
+        labSize--;
     }
-    for (let i = 0; i < mapSize; i++) {
-        for (let j = 0; j < mapSize; j++) {
+    for (let i = 0; i < labSize; i++) {
+        for (let j = 0; j < labSize; j++) {
             setWall(document.getElementById(i + " - " + j));
             }
         }
@@ -195,7 +207,33 @@ function createLabyrinth() {
     while (!isValidMaze()) {
         lastikPath();
     }
+    if (mapSize % 2 === 0) {
+       finishLabyrinth2();
+    }
     drawMaze();
+}
+
+function finishLabyrinth2() {
+    for (let i = 1; i < mapSize - 1; i++) {
+        if (matrixLab[i-1][mapSize-2] === false || matrixLab[i][mapSize-2] === false || matrixLab[i+1][mapSize-2] === false){
+            matrixLab[i][mapSize-1] = true;
+        }
+        if (matrixLab[mapSize-2][i-1] === false || matrixLab[mapSize-2][i] === false || matrixLab[mapSize-2][i+1] === false){
+            matrixLab[mapSize-1][i] = true;
+        }
+    }
+    if (matrixLab[0][mapSize-2] === false || matrixLab[1][mapSize-2] === false)
+    {
+        matrixLab[0][mapSize-1] = true;
+    }
+    if (matrixLab[mapSize-2][0] === false || matrixLab[mapSize-2][1] === false)
+    {
+        matrixLab[mapSize-1][0] = true;
+    }
+    if (matrixLab[mapSize-1][mapSize-2] === true || matrixLab[mapSize-2][mapSize-1] === true)
+    {
+        matrixLab[mapSize-1][mapSize-1] = true;
+    }
 }
 
 function lastikPath() {
@@ -203,13 +241,13 @@ function lastikPath() {
     if (lastik.x > 0) {
         directions.push([-2, 0]);
     }
-    if (lastik.x < mapSize - 1) {
+    if (lastik.x < labSize - 1) {
         directions.push([2, 0]);
     }
     if (lastik.y > 0) {
         directions.push([0, -2]);
     }
-    if (lastik.y < mapSize - 1) {
+    if (lastik.y < labSize - 1) {
         directions.push([0, 2]);
     }
 
@@ -224,8 +262,8 @@ function lastikPath() {
 }
 
 function isValidMaze() {
-    for (let i = 0; i < mapSize; i += 2) {
-        for (let j = 0; j < mapSize; j += 2) {
+    for (let i = 0; i < labSize; i += 2) {
+        for (let j = 0; j < labSize; j += 2) {
             if (!matrixLab[i][j]) {
                 return false;
             }
@@ -283,7 +321,11 @@ async function findPath() {
         await new Promise(resolve => setTimeout(resolve, 15))
     }
 
-    deleteFiles();
+    openList.splice(0,openList.length);
+    closeList.splice(0,closeList.length);
+    matrixLab.splice(0,matrixLab.length);
+    breakFlag = false;
+    index = 0;
 }
 
 function minBlockF() {
