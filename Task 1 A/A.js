@@ -54,6 +54,10 @@ function createMap(){
         alert("Choose a smaller size!")
         return 0;
     }
+    if (isNaN(mapSize) || undefined) {
+        alert("Put a number!")
+        return 0;
+    }
     const table = document.querySelector('tbody');
 
     for (let i = 0; i < mapSize; i++) {
