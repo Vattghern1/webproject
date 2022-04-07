@@ -38,8 +38,8 @@ function clearMap() {
             }
         }
     }
-    startBlock = (0,0);
-    endBlock = (0,0);
+    startBlock = document.getElementById(0+" - "+0);
+    endBlock = document.getElementById((mapSize-1)+" - "+(mapSize-1));
 }
 
 //Создание карты
@@ -174,8 +174,6 @@ function updateMatrix() {
         }
     }
 }
-
-
 
 //Создание лабиринта
 const lastik = {
@@ -321,11 +319,15 @@ async function findPath() {
         await new Promise(resolve => setTimeout(resolve, 15))
     }
 
-    openList.splice(0,openList.length);
-    closeList.splice(0,closeList.length);
-    matrixLab.splice(0,matrixLab.length);
-    breakFlag = false;
+    deleteFilesAStar();
+}
+
+function deleteFilesAStar () {
     index = 0;
+    breakFlag = false;
+    openList.length = 0;
+    closeList.length = 0;
+    matrixLab.length = 0;
 }
 
 function minBlockF() {
