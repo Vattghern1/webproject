@@ -294,7 +294,6 @@ async function findPath() {
     let temp;
     let tempX = endBlock.x;
     let tempY = endBlock.y;
-    let flag = false;
     openList.push(startBlock);
     while (!breakFlag) {
         let minBlock = minBlockF();
@@ -302,8 +301,8 @@ async function findPath() {
         closeList.push(minBlock);
         currentBlockNeighbours(minBlock);
         if (openList.length <= 0) {
-            flag = true;
             alert("No path")
+            breakFlag = true;
             break;
         }
         await new Promise(resolve => setTimeout(resolve, 15))
