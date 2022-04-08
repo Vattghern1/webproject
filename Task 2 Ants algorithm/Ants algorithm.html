@@ -5,46 +5,17 @@
     <title>Ants algorithm</title>
     <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="Ants%20algorithm.css">
-    <script src="Ants%20algorithm.js"></script>
+    <script type="module" src="Ants%20algorithm.js"></script>
 </head>
 <body>
+
     <button id = "buttonBack" onclick="document.location.href = '../main.html'"><img src = "../images/button.png" style="width: 50px; height: 50px"></button>
     <canvas id = "fieldForPoints" width = "1170" height = "800" style = "border:2px solid black">Canvas</canvas>
-    <script>
-        var canvas = document.getElementById("fieldForPoints");
-        var context = canvas.getContext('2d');
 
-        number = 1;
 
-    </script>
-    <div>
-        <button id="button1" onclick="canvas.addEventListener('mousedown', function (e) {
-            context.beginPath();
-            context.arc(e.clientX - 710, e.clientY - 30, 10, 0, Math.PI * 2);
-            context.fillStyle = 'white';
-            context.fill();
-            context.strokeStyle = 'black'
-            context.stroke();
-
-            addPointsInArray(e.clientX - 710, e.clientY - 30);
-
-            context.fillStyle = '#00F';
-            context.strokeStyle = '#F00';
-            context.font = '25px Verdana';
-            context.fillText(number,e.clientX - 720 , e.clientY - 43);
-            context.font = 'bold 10px sans-serif';
-            number++;
-
-        });" >Добавить точки</button>
+    <div class="buttons">
+        <button id = "buttonClear" >Очистить поле</button>
+        <button id = "buttonStart" >Готово</button>
     </div>
-
-    <div>
-        <button id="button2" onclick="clearing()">Очистить поле</button>
-    </div>
-
-    <div>
-        <button id = "button3" onclick="drawLines()">Готово</button>
-    </div>
-
 </body>
 </html>
