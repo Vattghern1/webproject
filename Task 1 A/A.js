@@ -44,9 +44,14 @@ function clearMap() {
     deleteFilesAStar();
 }
 
-//Создание карты
-function createMap(){
-    document.querySelector('tbody').innerHTML = '';
+//Создание таблицы на старте страницы
+document.addEventListener("DOMContentLoaded", () => {
+    mapSize = 10;
+    createMap();
+});
+
+//Получение размера карты
+function getMapSize() {
     mapSize = parseInt(document.getElementById('InputMapSize').value);
     if (mapSize < 5) {
         alert("Choose a larger size!")
@@ -60,6 +65,11 @@ function createMap(){
         alert("Put a number!")
         return 0;
     }
+    createMap();
+}
+//Создание карты
+function createMap(){
+    document.querySelector('tbody').innerHTML = '';
     const table = document.querySelector('tbody');
 
     for (let i = 0; i < mapSize; i++) {
