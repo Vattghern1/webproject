@@ -225,6 +225,7 @@ function createLabyrinth() {
        finishLabyrinth2();
     }
     drawMaze();
+    clearMap();
 }
 
 function finishLabyrinth2() {
@@ -326,7 +327,7 @@ async function findPath() {
 }
 
 async function drawPath() {
-    let temp = endBlock;
+    let temp = new blockCoordinates(endBlock.x, endBlock.y);
     let checkDraw = 0;
     while (temp !== startBlock) {
         temp = matrix[temp.x][temp.y].parent;
