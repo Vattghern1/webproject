@@ -41,6 +41,7 @@ function clearMap() {
     }
     startBlock = document.getElementById(0+" - "+0);
     endBlock = document.getElementById((mapSize-1)+" - "+(mapSize-1));
+    deleteFilesAStar();
 }
 
 //Создание карты
@@ -131,17 +132,13 @@ function setWall(block) {
 }
 
 function setEnd(block) {
-    if (endBlock) {
-        endBlock.style.backgroundColor = "white";
-    }
+    endBlock.style.backgroundColor = "white";
     block.style.backgroundColor = "red";
     endBlock = block;
 }
 
 function setBegin(block) {
-    if (startBlock) {
-        startBlock.style.backgroundColor = "white";
-    }
+    startBlock.style.backgroundColor = "white";
     block.style.backgroundColor = "green";
     startBlock = block;
 }
@@ -157,6 +154,9 @@ function createMatrix() {
 }
 
 function updateMatrix() {
+    matrix.length = 0;
+    matrix = new Array(mapSize);
+    createMatrix();
     for (let i = 0; i < mapSize; i++) {
         for (let j = 0; j < mapSize; j++) {
             let tempColor = document.getElementById(i+" - "+j).style.backgroundColor;
@@ -172,7 +172,7 @@ function updateMatrix() {
                     endBlock = new blockCoordinates(i, j);
                     matrix[i][j].value = 0;
                     break;
-                default:
+                case "white":
                     matrix[i][j].value = 0;
                     break;
 
