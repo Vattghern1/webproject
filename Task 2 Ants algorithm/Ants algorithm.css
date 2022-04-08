@@ -20,29 +20,10 @@ canvas {
     box-shadow: inset 0 0 0 3px #808080;
 }
 
-#button1 {
-    display: block;
-    height: 60px;
-    color: white;
-    border-radius: 10px;
-    font-size: 30px;
-    font-family: Montserrat SemiBold;
-    background-color: #800000;
-    width: 300px;
-    margin-left: 200px;
-    margin-top: -500px;
-}
-
-#button1:hover {
-    box-shadow: inset 0 0 0 3px #808080;
-}
-
-#button2 {
+#buttonClear  {
     display: block;
     width: 300px;
     height: 60px;
-    margin-top: 10px;
-    margin-left: 200px;
     color: white;
     border-radius: 10px;
     font-size: 30px;
@@ -50,16 +31,14 @@ canvas {
     background-color: #800000;
 }
 
-#button2:hover {
+buttonClear:hover {
     box-shadow: inset 0 0 0 3px #808080;
 }
 
-#button3 {
+#buttonStart{
     background-color: green;
     width: 240px;
     height: 50px;
-    margin-top: 405px;
-    margin-left: 1180px;
     color: white;
     border-radius: 10px;
     text-align: center;
@@ -68,10 +47,15 @@ canvas {
     font-size: 25px;
 }
 
-#button3:hover {
+#buttonStart:hover {
     box-shadow: inset 0 0 0 3px #808080;
 }
 
 body {
     background: url(../images/fon.png); background-size: 100%;
+}
+
+.buttons{
+    margin-top: 405px;
+    margin-left: 1180px;
 }
