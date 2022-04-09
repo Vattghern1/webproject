@@ -4,39 +4,33 @@
     <meta charset="UTF-8">
     <title>A*</title>
     <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
-    <script src="A.js"></script>
     <link rel="stylesheet" href="../Task%201%20A/A.css">
+    <script src="A.js"></script>
 </head>
 <body style="background: url(../images/fon.png); background-size: 100%;">
     <button id = "buttonBack" onclick="document.location.href = '../main.html'"><img src = "../images/button.png" style="width: 50px; height: 50px"></button>
 <div class="inputSize">
-    <h3>Set map size:</h3>
-    <input id="InputMapSize">
-    <button onclick="createMap()">Submit</button>
+    <h3>Set map size (5-80):</h3>
+    <input type="number" id="InputMapSize">
+    <button onclick="getMapSize()">Submit</button>
 </div>
 
-<div class="sidebar">
+<div id="buttons">
     <h3>Panel:</h3>
-    <ul>
-        <li><button onclick="clearMap()">Clear</button></li>
-        <li><button onclick="createLabyrinth()">Create Lab</button></li>
-        <div id="selectButton">
-        <li><button id="buttonWall" value="Wall" onclick="chooseWallBeginEnd(value)">Set Wall</button></li>
-        <li><button id="buttonDeleteWall" value="deleteWall" onclick="chooseWallBeginEnd(value)">Delete Wall</button></li>
-        <li><button id="buttonBegin" value="Begin" onclick="chooseWallBeginEnd(value)">Set begin</button></li>
-        <li><button id="buttonEnd" value="End" onclick="chooseWallBeginEnd(value)">Set end</button></li>
-        </div>
-        <li><button onclick="findPath()">Find Path</button></li>
-    </ul>
+    <button onclick="clearMap()">Clear</button>
+    <button onclick="createLabyrinth()">Create Lab</button>
+    <button id="buttonWall" value="Wall" onclick="chooseWallBeginEnd(value)">Set Wall</button>
+    <button id="buttonDeleteWall" value="deleteWall" onclick="chooseWallBeginEnd(value)">Delete Wall</button>
+    <button id="buttonBegin" value="Begin" onclick="chooseWallBeginEnd(value)">Set begin</button>
+    <button id="buttonEnd" value="End" onclick="chooseWallBeginEnd(value)">Set end</button>
+    <button onclick="findPath()">Find Path</button>
 </div>
+
+
 
 <table class="map">
-    <tbody>
-
-    </tbody>
+    <tbody></tbody>
 </table>
-
-</div>
 
 </body>
 </html>
