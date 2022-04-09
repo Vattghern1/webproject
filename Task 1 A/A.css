@@ -7,6 +7,7 @@ body{
     margin-left: 3%;
 }
 
+
 #buttons {
     font-family: Montserrat SemiBold, serif;
     font-size: 30px;
@@ -58,6 +59,10 @@ button:hover {
     box-shadow: inset 0 0 0 3px #808080;
 }
 
+table tr td:hover {
+    background-color: #60005c;
+}
+
 
 .map {
     top:50px;
@@ -72,8 +77,6 @@ button:hover {
     border-radius: 12px;
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
-
-
 
 
 
