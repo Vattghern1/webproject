@@ -269,27 +269,23 @@ function drawPath(path) {
             drawArc(coords.x[i], coords.y[i]);
             drawNums(coords.x[i], coords.y[i], i + 1);
         }
-    }, 15);
+    }, 100);
 }
 
 function geneticAlg() {
     fullMatrix();
     let generations = permute(points);
     for(let i = 0; i < 1800; i++) {
-        let firstParent = random(generations.length);
-        let secondParent = random(generations.length);
-        if (secondParent === firstParent) {
-            while(secondParent === firstParent) {
-                secondParent = random(counterPoints);
-            }
+        let best = Math.floor(generations.length * 0.5);
+        for(let j = 0; j < best; j += 2) {
+            let children = crossing(generations[j], generations[j+1]);
+            mutation(children.child1);
+            mutation(children.child2);
+            generations.push(children.child1);
+            generations.push(children.child2);
         }
-        let children = crossing(generations[firstParent], generations[secondParent]);
-        mutation(children.child1);
-        mutation(children.child2);
-        generations.push(children.child1);
-        generations.push(children.child2);
         qsort(generations);
-        for(let j = 0; j < 2; j++) {
+        for(let j = 0; j < best; j++) {
             generations.pop();
         }
         drawPath(generations[0]);
