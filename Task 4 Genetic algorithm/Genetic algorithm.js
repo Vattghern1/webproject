@@ -22,6 +22,14 @@ const generationMax = 400;
 var generationCounter = 0;
 const mutationPercent = 50;
 
+function drawNums(x, y, num) {
+    ctx.fillStyle = 'black';
+    ctx.font = '25px Verdana';
+    ctx.fillText(num,x, y - 23);
+    ctx.font = 'bold 10px sans-serif';
+    ctx.fillStyle = 'white';
+}
+
 function drawArc(x, y) {
     ctx.beginPath();
     ctx.arc(x, y, 15, 0, Math.PI * 2);
@@ -34,6 +42,7 @@ canvas.addEventListener('mousedown', function (e) {
     let tempCoordY = e.clientY-30;
     points.push(counterPoints++);
     drawArc(tempCoordX, tempCoordY);
+    drawNums(tempCoordX, tempCoordY, counterPoints);
     coords.x.push(tempCoordX);
     coords.y.push(tempCoordY);
 });
@@ -52,6 +61,7 @@ function findDistancesSum(arrayPoints) {
     for(let j = 0; j < counterPoints-1; j++) {
         tempSum += distMatrix[arrayPoints[j]][arrayPoints[j+1]];
     }
+    tempSum += distMatrix[arrayPoints[0]][arrayPoints[counterPoints-1]];
     return tempSum;
 }
 
@@ -85,7 +95,7 @@ function permute(points, memo) {
 
 function copy(obj) {
     let copyObj = [];
-    for(let i = 0; i < counterPoints-1; i++) {
+    for(let i = 0; i < counterPoints; i++) {
         copyObj[i] = obj[i];
     }
     return copyObj;
@@ -175,11 +185,67 @@ function BubbleSort(array) {
     }
 }
 
-//возможно ошибка с присвоением переменных
+function swap(arr, i1, i2){
+    if (i1 === i2) return;
+
+    const swap = arr[i1];
+    arr[i1] = arr[i2];
+    arr[i2] = swap;
+}
+
+function qsort(arr){
+    let ranges = [[0, arr.length-1]];
+
+    while (ranges.length) {
+        let nextRanges = [];
+
+        for (let k = 0; k < ranges.length; k++) {
+            let start = ranges[k][0];
+            let finish = ranges[k][1];
+
+            let pos = Math.floor((start + finish) / 2);
+
+            let number = arr[pos][counterPoints];
+            let pos1 = pos;
+            let pos2 = finish;
+
+            while (pos1 < pos2){
+                if (number > arr[pos2][counterPoints]){
+                    swap(arr, pos2, pos1 + 1);
+                    swap(arr, pos1 + 1, pos1);
+
+                    pos1++;
+                }
+
+                else{
+                    pos2--;
+                }
+            }
+            for (let i = pos - 1; i >= start; i--) {
+                if (arr[i][counterPoints] > number) {
+                    swap(arr, i, pos1 - 1);
+                    swap(arr, pos1 - 1, pos1);
+                    pos1--;
+                }
+            }
+
+            if (pos1 > start + 1){
+                nextRanges.push([start, pos1 - 1]);
+            }
+
+            if (finish - pos1 > 1) {
+                nextRanges.push([pos1 + 1, finish]);
+            }
+        }
+
+        ranges = nextRanges;
+    }
+}
+
 function mutation(child) {
     if (random(100) < mutationPercent) {
-        let firstRandInd = random(100);
-        let secRandInd = random(100);
+        let firstRandInd = random(counterPoints-1);
+        let secRandInd = random(counterPoints-1);
         let temp = child[firstRandInd];
         child[firstRandInd] = child[secRandInd];
         child[secRandInd] = temp;
@@ -188,37 +254,38 @@ function mutation(child) {
 }
 
 function drawPath(path) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.beginPath();
-    ctx.moveTo(coords.x[path[0]], coords.y[path[0]]);
-    for(let i = 1; i < counterPoints; i++) {
-        ctx.lineTo(coords.x[path[i]], coords.y[path[i]]);
-    }
-    ctx.lineTo(coords.x[path[0]], coords.y[path[0]]);
-    ctx.stroke();
-    for(let i = 0; i < counterPoints; i++) {
-        drawArc(coords.x[i], coords.y[i]);
-    }
+    setTimeout(function () {
+        ctx.strokeStyle = '#800000';
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        ctx.moveTo(coords.x[path[0]], coords.y[path[0]]);
+        for (let i = 1; i < counterPoints; i++) {
+            ctx.lineTo(coords.x[path[i]], coords.y[path[i]]);
+        }
+        ctx.lineTo(coords.x[path[0]], coords.y[path[0]]);
+        ctx.stroke();
+        ctx.strokeStyle = '#404040';
+        for (let i = 0; i < counterPoints; i++) {
+            drawArc(coords.x[i], coords.y[i]);
+            drawNums(coords.x[i], coords.y[i], i + 1);
+        }
+    }, 100);
 }
 
 function geneticAlg() {
     fullMatrix();
     let generations = permute(points);
-    for(let i = 0; i < 5; i++) {
-        let firstParent = random(generations.length);
-        let secondParent = random(generations.length);
-        if (secondParent == firstParent) {
-            while(secondParent == firstParent) {
-                secondParent = random(counterPoints);
-            }
+    for(let i = 0; i < 1800; i++) {
+        let best = Math.floor(generations.length * 0.5);
+        for(let j = 0; j < best; j += 2) {
+            let children = crossing(generations[j], generations[j+1]);
+            mutation(children.child1);
+            mutation(children.child2);
+            generations.push(children.child1);
+            generations.push(children.child2);
         }
-        let children = crossing(generations[firstParent], generations[secondParent]);
-        mutation(children.child1);
-        mutation(children.child2);
-        generations.push(children.child1);
-        generations.push(children.child2);
-        BubbleSort(generations);
-        for(let j = 0; j < 2; j++) {
+        qsort(generations);
+        for(let j = 0; j < best; j++) {
             generations.pop();
         }
         drawPath(generations[0]);
