@@ -78,6 +78,12 @@ table tr td:hover {
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 
+@font-face {
+    font-family: "Montserrat SemiBold";
+    src: url("../Font/Montserrat.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
 
 
 

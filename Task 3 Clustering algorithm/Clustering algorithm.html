@@ -6,19 +6,21 @@
     <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="Clustering%20algorithm.css">
 </head>
-    <button id = "buttonBack" onclick="document.location.href = '../main.html'"><img src = "../images/button.png" style="width: 50px; height: 50px"></button>
-<body class="bodyClass">
+
+<body>
+<button id = "buttonBack" onclick="document.location.href = '../main.html'"><img src = "../images/button.png" id = "itImg"></button>
 <canvas id="canvas">Hello</canvas>
 
 <div class="inputCountClass">
-    <div style="margin-top: auto">Set clusters count:</div>
+    <div>Set clusters count:</div>
     <div id="windowOfCounter">1</div>
-    <div class="rangeClass"><input type="range" min="1" max="50" step="1" id="counterClusters" oninput="setClustersCount()" value="1" style = "width: 450px"></div>
-    <button id="button1" onclick="alertFunc()">CLUSTERING</button>
-    <button id="button2" onclick="clearing()">CLEAR</button>
-    <button id="button3" onclick="randomPoints()">RANDOM POINTS</button>
+    <div class="rangeClass"><input type="range" min="1" max="50" step="1" id="counterClusters" oninput="setClustersCount()" value="1"></div>
+    <button id="buttonStart" onclick="alertFunc()">CLUSTERING</button>
+    <button id="buttonClear" onclick="clearing()">CLEAR</button>
+    <button id="buttonRandPoints" onclick="randomPoints()">RANDOM POINTS</button>
 </div>
 
+<script src="Colors.js"></script>
 <script src="Clustering%20algorithm.js"></script>
 </body>
 </html>

@@ -75,3 +75,10 @@ canvas {
 body {
     background: url(../images/fon.png); background-size: 100%;
 }
+
+@font-face {
+    font-family: "Montserrat SemiBold";
+    src: url("../Font/Montserrat.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
