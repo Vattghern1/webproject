@@ -1,26 +1,38 @@
-var canvas = document.getElementById('canvas');
-var ctx = canvas.getContext('2d');
-var widthConst = (window.innerWidth / 100);
-var heightConst = (window.innerHeight / 100);
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const widthConst = (window.innerWidth / 100);
+const heightConst = (window.innerHeight / 100);
 canvas.width = widthConst * 75;
 canvas.height = heightConst * 75;
-
 ctx.strokeStyle = "#404040";
 ctx.lineWidth = 4;
 ctx.fillStyle = "white";
 
 //vars for array of coords:
-var coords = {
+let coords = {
     x : [],
     y : []
 }
-var distMatrix = [];
-var counterPoints = 0;
-var points = [];
-var results = [];
+
 const generationMax = 400;
-var generationCounter = 0;
 const mutationPercent = 50;
+
+let distMatrix = [];
+let counterPoints = 0;
+let points = [];
+let results = [];
+let generationCounter = 0;
+
+function clearing() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    coords.x = [];
+    coords.y = [];
+    distMatrix = [];
+    counterPoints = 0;
+    points = [];
+    results = [];
+    generationCounter = 0;
+}
 
 function drawNums(x, y, num) {
     ctx.fillStyle = 'black';
@@ -112,16 +124,16 @@ function crossing(firstParent, secondParent) {
     for(let i = 0; i <= pointGap; i++) {
         child1.push(firstParent[i]);
         for (let j = 0; j < counterPoints; j++) {
-            if (firstParent[i] == secondParent[j]) {
+            if (firstParent[i] === secondParent[j]) {
                 copySecParent[j] = -1;
             }
         }
     }
     for(let i = pointGap+1; i < counterPoints; i++) {
-        if (copySecParent[i] != -1) {
+        if (copySecParent[i] !== -1) {
             child1.push(secondParent[i]);
             for(let j = 0; j < counterPoints; j++) {
-                if (secondParent[i] == firstParent[j]) {
+                if (secondParent[i] === firstParent[j]) {
                     copyFirstParent[j] = -1;
                 }
             }
@@ -129,7 +141,7 @@ function crossing(firstParent, secondParent) {
     }
     if (child1.length < counterPoints) {
         for(let i = pointGap+1; i < counterPoints; i++) {
-            if ((copyFirstParent[i] != -1) && (child1.length < counterPoints)) {
+            if ((copyFirstParent[i] !== -1) && (child1.length < counterPoints)) {
                 child1.push(firstParent[i]);
             }
         }
@@ -140,16 +152,16 @@ function crossing(firstParent, secondParent) {
     for(let i = 0; i <= pointGap; i++) {
         child2.push(secondParent[i]);
         for (let j = 0; j < counterPoints; j++) {
-            if (secondParent[i] == firstParent[j]) {
+            if (secondParent[i] === firstParent[j]) {
                 copyFirstParent[j] = -1;
             }
         }
     }
     for(let i = pointGap+1; i < counterPoints; i++) {
-        if (copyFirstParent[i] != -1) {
+        if (copyFirstParent[i] !== -1) {
             child2.push(firstParent[i]);
             for(let j = 0; j < counterPoints; j++) {
-                if (firstParent[i] == secondParent[j]) {
+                if (firstParent[i] === secondParent[j]) {
                     copySecParent[j] = -1;
                 }
             }
@@ -157,7 +169,7 @@ function crossing(firstParent, secondParent) {
     }
     if (child2.length < counterPoints) {
         for(let i = pointGap+1; i < counterPoints; i++) {
-            if ((copySecParent[i] != -1) && (child2.length < counterPoints)) {
+            if ((copySecParent[i] !== -1) && (child2.length < counterPoints)) {
                 child2.push(secondParent[i]);
             }
         }
@@ -172,19 +184,6 @@ function crossing(firstParent, secondParent) {
     }
 }
 
-function BubbleSort(array) {
-    let n = array.length;
-    for (let i = 0; i < n-1; i++) {
-        for (let j = 0; j < n-1-i; j++) {
-            if (array[j+1][counterPoints] < array[j][counterPoints]) {
-                let t = array[j+1];
-                array[j+1] = array[j];
-                array[j] = t;
-            }
-        }
-    }
-}
-
 function swap(arr, i1, i2){
     if (i1 === i2) return;
 
@@ -193,7 +192,7 @@ function swap(arr, i1, i2){
     arr[i2] = swap;
 }
 
-function qsort(arr){
+function quickSort(arr){
     let ranges = [[0, arr.length-1]];
 
     while (ranges.length) {
@@ -270,36 +269,33 @@ function drawPath(path) {
             drawNums(coords.x[i], coords.y[i], i + 1);
         }
     }, 100);
+    clearTimeout();
 }
 
 function geneticAlg() {
+
     fullMatrix();
+
     let generations = permute(points);
+
     for(let i = 0; i < 1800; i++) {
-        let best = Math.floor(generations.length * 0.5);
-        for(let j = 0; j < best; j += 2) {
+        let countCrossings = Math.floor(generations.length * 0.5);
+        for(let j = 0; j < countCrossings; j += 2) {
             let children = crossing(generations[j], generations[j+1]);
             mutation(children.child1);
             mutation(children.child2);
             generations.push(children.child1);
             generations.push(children.child2);
         }
-        qsort(generations);
-        for(let j = 0; j < best; j++) {
+
+        quickSort(generations);
+
+        for(let j = 0; j < countCrossings; j++) {
             generations.pop();
         }
+
         drawPath(generations[0]);
     }
 }
 
-function clearing() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    coords.x = [];
-    coords.y = [];
-    distMatrix = [];
-    counterPoints = 0;
-    points = [];
-    results = [];
-    generationCounter = 0;
-}
 
