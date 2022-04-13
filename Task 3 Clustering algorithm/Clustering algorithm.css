@@ -16,7 +16,7 @@ body {
     margin: 5px auto;
     border-radius: 10px;
     font-size: 50px;
-    font-family: 'Montserrat SemiBold', serif;
+    font-family: "Montserrat SemiBold", serif;
     width: 40px;
     height: 40px;
     text-align: center;
@@ -29,7 +29,7 @@ button {
     color: white;
     border-radius: 10px;
     font-size: 25px;
-    font-family: Montserrat SemiBold, serif;
+    font-family: "Montserrat SemiBold", serif;
     background-color: #800000;
 }
 
@@ -70,9 +70,9 @@ button:hover {
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 
-#itImg {
+#backImg {
     width: 50px;
-    height: 50px
+    height: 50px;
 }
 
 input[type=range] {

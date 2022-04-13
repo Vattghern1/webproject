@@ -8,14 +8,15 @@ ctx.strokeStyle = "#404040";
 ctx.lineWidth = 4;
 ctx.fillStyle = "white";
 
-//vars for array of coords:
 let coords = {
     x : [],
     y : []
 }
 
+//algorithm parameters:
 const generationMax = 400;
 const mutationPercent = 50;
+const iterationCount = 3600;
 
 let distMatrix = [];
 let counterPoints = 0;
@@ -49,14 +50,18 @@ function drawArc(x, y) {
     ctx.stroke();
 }
 
+function pushCoords(x, y) {
+    drawArc(x, y);
+    coords.x.push(x);
+    coords.y.push(y);
+}
+
 canvas.addEventListener('mousedown', function (e) {
-    let tempCoordX = e.clientX-237;
-    let tempCoordY = e.clientY-30;
+    let tempX = e.clientX-237;
+    let tempY = e.clientY-30;
     points.push(counterPoints++);
-    drawArc(tempCoordX, tempCoordY);
-    drawNums(tempCoordX, tempCoordY, counterPoints);
-    coords.x.push(tempCoordX);
-    coords.y.push(tempCoordY);
+    drawNums(tempX, tempY, counterPoints);
+    pushCoords(tempX, tempY);
 });
 
 function fullMatrix () {
@@ -113,16 +118,11 @@ function copy(obj) {
     return copyObj;
 }
 
-function crossing(firstParent, secondParent) {
-
-    let pointGap = random(counterPoints - 2);
-    let child1 = [];
-    let child2 = [];
-
+function subCrossing(firstParent, secondParent, child, pointGap) {
     let copyFirstParent = copy(firstParent);
     let copySecParent = copy(secondParent);
     for(let i = 0; i <= pointGap; i++) {
-        child1.push(firstParent[i]);
+        child.push(firstParent[i]);
         for (let j = 0; j < counterPoints; j++) {
             if (firstParent[i] === secondParent[j]) {
                 copySecParent[j] = -1;
@@ -131,7 +131,7 @@ function crossing(firstParent, secondParent) {
     }
     for(let i = pointGap+1; i < counterPoints; i++) {
         if (copySecParent[i] !== -1) {
-            child1.push(secondParent[i]);
+            child.push(secondParent[i]);
             for(let j = 0; j < counterPoints; j++) {
                 if (secondParent[i] === firstParent[j]) {
                     copyFirstParent[j] = -1;
@@ -139,41 +139,23 @@ function crossing(firstParent, secondParent) {
             }
         }
     }
-    if (child1.length < counterPoints) {
+    if (child.length < counterPoints) {
         for(let i = pointGap+1; i < counterPoints; i++) {
-            if ((copyFirstParent[i] !== -1) && (child1.length < counterPoints)) {
-                child1.push(firstParent[i]);
+            if ((copyFirstParent[i] !== -1) && (child.length < counterPoints)) {
+                child.push(firstParent[i]);
             }
         }
     }
+}
 
-    copyFirstParent = copy(firstParent);
-    copySecParent = copy(secondParent);
-    for(let i = 0; i <= pointGap; i++) {
-        child2.push(secondParent[i]);
-        for (let j = 0; j < counterPoints; j++) {
-            if (secondParent[i] === firstParent[j]) {
-                copyFirstParent[j] = -1;
-            }
-        }
-    }
-    for(let i = pointGap+1; i < counterPoints; i++) {
-        if (copyFirstParent[i] !== -1) {
-            child2.push(firstParent[i]);
-            for(let j = 0; j < counterPoints; j++) {
-                if (firstParent[i] === secondParent[j]) {
-                    copySecParent[j] = -1;
-                }
-            }
-        }
-    }
-    if (child2.length < counterPoints) {
-        for(let i = pointGap+1; i < counterPoints; i++) {
-            if ((copySecParent[i] !== -1) && (child2.length < counterPoints)) {
-                child2.push(secondParent[i]);
-            }
-        }
-    }
+function crossing(firstParent, secondParent) {
+
+    let pointGap = random(counterPoints - 2);
+    let child1 = [];
+    let child2 = [];
+
+    subCrossing(firstParent, secondParent, child1, pointGap);
+    subCrossing(secondParent, firstParent, child2, pointGap);
 
     child1.push(findDistancesSum(child1));
     child2.push(findDistancesSum(child2));
@@ -278,7 +260,7 @@ function geneticAlg() {
 
     let generations = permute(points);
 
-    for(let i = 0; i < 1800; i++) {
+    for(let i = 0; i < iterationCount; i++) {
         let countCrossings = Math.floor(generations.length * 0.5);
         for(let j = 0; j < countCrossings; j += 2) {
             let children = crossing(generations[j], generations[j+1]);

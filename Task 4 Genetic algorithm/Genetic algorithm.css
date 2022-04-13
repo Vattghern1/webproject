@@ -7,7 +7,7 @@
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 
-.bodyClass {
+body {
     background: url(../images/fon.png);
     background-size: 100%;
 }
@@ -20,7 +20,7 @@
     height: 150px;
     background-color: white;
     font-size: 40px;
-    font-family: "Montserrat SemiBold";
+    font-family: "Montserrat SemiBold", serif;
     color: #292929;
     border-radius: 15px;
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
@@ -30,26 +30,14 @@ button:hover {
     box-shadow: inset 0 0 0 3px #808080;
 }
 
-#buttonStart {
+button {
     margin: auto;
     width: 300px;
     height: 80px;
     color: white;
     border-radius: 10px;
     font-size: 40px;
-    font-family: Montserrat SemiBold;
-    background-color: #800000;
-}
-
-#buttonClear {
-    appearance: none;
-    margin: 4px auto;
-    width: 300px;
-    height: 80px;
-    color: white;
-    border-radius: 10px;
-    font-size: 40px;
-    font-family: Montserrat SemiBold;
+    font-family: "Montserrat SemiBold", serif;
     background-color: #800000;
 }
 
@@ -60,6 +48,11 @@ button:hover {
     width: 80px;
     height: 80px;
     border-radius: 80px;
+}
+
+#backImg {
+    width: 50px;
+    height: 50px;
 }
 
 @font-face {

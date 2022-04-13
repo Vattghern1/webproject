@@ -145,8 +145,8 @@ function copy(obj) {
 }
 
 function isEqual(firstObj, secObj) {
-    for(let i in firstObj) {
-        if ((firstObj.x[i] !== secObj.x[i]) && (firstObj.y[i] !== secObj.y[i])) {
+    for(let i in firstObj.x) {
+        if ((firstObj.x[i] !== secObj.x[i]) || (firstObj.y[i] !== secObj.y[i])) {
             return false;
         }
     }
