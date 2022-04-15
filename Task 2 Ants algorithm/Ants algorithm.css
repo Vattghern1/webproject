@@ -19,12 +19,12 @@ canvas {
 .buttons {
     display: block;
     margin: 28px auto;
-    margin-left: 1000px;
+    margin-left: 1130px;
     text-align: center;
-    width: 800px;
+    width: 900px;
     height: 150px;
     background-color: white;
-    font-size: 40px;
+    font-size: 50px;
     font-family: "Montserrat SemiBold", serif;
     color: #292929;
     border-radius: 15px;

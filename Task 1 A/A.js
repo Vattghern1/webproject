@@ -205,8 +205,8 @@ function createLabyrinth() {
     for (let i = 0; i < labSize; i++) {
         for (let j = 0; j < labSize; j++) {
             setWall(document.getElementById(i + " - " + j));
-            }
         }
+    }
 
     matrixLab = new Array(mapSize);
     for (let i = 0; i < mapSize; i++) {
@@ -222,7 +222,7 @@ function createLabyrinth() {
         lastikPath();
     }
     if (mapSize % 2 === 0) {
-       finishLabyrinth2();
+        finishLabyrinth2();
     }
     drawMaze();
     clearMap();

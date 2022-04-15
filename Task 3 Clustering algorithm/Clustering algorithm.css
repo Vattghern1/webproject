@@ -59,6 +59,7 @@ button:hover {
 .inputCountClass {
     display: block;
     margin: 20px auto;
+    margin-left: 800px;
     text-align: center;
     width: 1200px;
     height: 210px;
