@@ -69,8 +69,8 @@ function getMapSize() {
 }
 //Создание карты
 function createMap(){
-    document.querySelector('tbody').innerHTML = '';
-    const table = document.querySelector('tbody');
+    document.querySelector('table').innerHTML = '';
+    const table = document.getElementById('table-matrix');
 
     for (let i = 0; i < mapSize; i++) {
         let tr = document.createElement('tr');
