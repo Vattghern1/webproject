@@ -15,7 +15,8 @@
     <div>Set clusters count:</div>
     <div id="windowOfCounter">1</div>
     <div class="rangeClass"><input type="range" min="1" max="50" step="1" id="counterClusters" oninput="setClustersCount()" value="1"></div>
-    <button id="buttonStart" onclick="alertFunc()">CLUSTERING</button>
+    <button id="buttonKmeans" onclick="alertFuncKMeans()">K-MEANS</button>
+    <button id="buttonHier" onclick="alertFuncHierarchical()">HIERARCHICAL</button>
     <button id="buttonClear" onclick="clearing()">CLEAR</button>
     <button id="buttonRandPoints" onclick="randomPoints()">RANDOM POINTS</button>
 </div>
