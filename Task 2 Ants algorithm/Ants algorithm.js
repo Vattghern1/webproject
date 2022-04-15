@@ -5,6 +5,9 @@ document.addEventListener("DOMContentLoaded", start);
 let canvas = document.getElementById("fieldForPoints");
 let number = 1;
 let context = canvas.getContext('2d');
+let answerField = document.getElementById("answer");
+let field = answerField.getContext('2d');
+
 
 function start(){
     canvas.addEventListener('mousedown', function (e) {
@@ -210,6 +213,14 @@ function antsAlgorithm(){
 
     }
 
+    let answerField = document.getElementById("answer");
+    let field = answerField.getContext('2d');
+
+    field.font = '60px Verdana';
+    field.fillText(currentMinLenght,5 , 125);
+    field.font = 'bold 10px sans-serif';
+
+
     return currentShortestPath;
 
 }
@@ -219,6 +230,9 @@ document.getElementById("buttonStart").onclick = drawLines;
 function drawLines(){ //соединяем города из пути коммивояжера линиями
     let canvas = document.getElementById("fieldForPoints");
     let context = canvas.getContext('2d');
+
+    let answerField = document.getElementById("answer");
+    let field = answerField.getContext('2d');
 
     let path = antsAlgorithm();
 
@@ -231,6 +245,12 @@ function drawLines(){ //соединяем города из пути комми
         context.stroke();
     }
 
+    field.font = '60px Verdana';
+    field.fillText("Длина пути:",5 , 45);
+    field.font = 'bold 10px sans-serif';
+
+
+
 }
 
 document.getElementById("buttonClear").onclick = clearing;
@@ -239,6 +259,7 @@ function clearing(){
     context.clearRect(0, 0, canvas.width, canvas.height);
     coordinates = [];
     number = 1;
+    field.clearRect(0, 0, answerField.width, answerField.height);
 }
 
 

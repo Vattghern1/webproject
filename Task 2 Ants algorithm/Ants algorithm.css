@@ -1,10 +1,16 @@
-canvas {
+#fieldForPoints {
     display: block;
     margin-left: 700px;
     margin-top: -60px;
     border-radius: 25px;
     background-color: white;
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+#answer{
+    display: block;
+    margin-left: 80px;
+    margin-top: -700px;
 }
 
 #buttonBack {
@@ -18,7 +24,7 @@ canvas {
 
 .buttons {
     display: block;
-    margin: 28px auto;
+    margin-top: 500px;
     margin-left: 1130px;
     text-align: center;
     width: 900px;
