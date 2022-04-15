@@ -8,6 +8,10 @@ ctx.strokeStyle = "#404040";
 ctx.lineWidth = 4;
 ctx.fillStyle = "white";
 
+//algorithm parameters:
+const iterationCount = 1800;
+const mutationPercent = 80;
+const generationMax = 400;
 
 let coords = {
     x : [],
@@ -38,7 +42,10 @@ canvas.addEventListener('mousedown', function (e) {
     let tempX = e.clientX-237;
     let tempY = e.clientY-30;
     points.push(counterPoints++);
+    drawArc(tempX, tempY);
     drawNums(tempX, tempY, counterPoints);
+    coords.x.push(tempX);
+    coords.y.push(tempY);
 });
 
 function fullMatrix () {
@@ -229,8 +236,11 @@ function drawPath(path) {
     }, 0);
 }
 
+function shuffle(array) {
+    array.sort(() => Math.random() - 0.5);
 }
 
+function geneticAlg() {
     fullMatrix();
     shuffle(points);
     let generations = permute(points);
@@ -254,4 +264,14 @@ function drawPath(path) {
     }
 }
 
+function clearing() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    coords.x = [];
+    coords.y = [];
+    distMatrix = [];
+    counterPoints = 0;
+    points = [];
+    results = [];
+    generationCounter = 0;
+}
 
