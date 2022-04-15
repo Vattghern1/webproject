@@ -1,4 +1,5 @@
 import {swap, qsort} from "./Quick-Sort.js";
+
 document.addEventListener("DOMContentLoaded", start);
 
 let canvas = document.getElementById("fieldForPoints");
@@ -216,8 +217,8 @@ function antsAlgorithm(){
 document.getElementById("buttonStart").onclick = drawLines;
 
 function drawLines(){ //соединяем города из пути коммивояжера линиями
-    var canvas = document.getElementById("fieldForPoints");
-    var context = canvas.getContext('2d');
+    let canvas = document.getElementById("fieldForPoints");
+    let context = canvas.getContext('2d');
 
     let path = antsAlgorithm();
 
@@ -229,6 +230,9 @@ function drawLines(){ //соединяем города из пути комми
         context.lineTo(coordinates[path[i + 1] - 1].x, coordinates[path[i + 1] - 1].y);
         context.stroke();
     }
+
+
+
 }
 
 document.getElementById("buttonClear").onclick = clearing;
