@@ -7,7 +7,6 @@ button:hover {
     background-size: 100%;
 }
 
-
 button {
     margin: auto;
     margin-top: 30px;
@@ -25,7 +24,7 @@ button {
     width: 80%;
     height: 300px;
     margin: auto;
-    margin-top: 75px;
+    margin-top: 200px;
     font-size: 45px;
     color: maroon;
     background-color: white;
@@ -39,6 +38,7 @@ button {
 
 .names {
     margin-top: 60px;
+    margin-left: 400px;
 }
 
 td, th {
