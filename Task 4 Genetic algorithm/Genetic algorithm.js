@@ -10,8 +10,8 @@ ctx.fillStyle = "white";
 
 //algorithm parameters:
 const iterationCount = 1800;
-const mutationPercent = 80;
-const generationMax = 400;
+const mutationPercent = 100;
+let generationMax;
 
 let coords = {
     x : [],
@@ -243,6 +243,7 @@ function shuffle(array) {
 function geneticAlg() {
     fullMatrix();
     shuffle(points);
+    generationMax = counterPoints**2;
     let generations = permute(points);
     for(let i = 0; i < iterationCount; i++) {
         let crossingsCount = Math.floor(generations.length / 2) - 1;

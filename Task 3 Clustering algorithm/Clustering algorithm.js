@@ -23,11 +23,18 @@ function setClustersCount() {
     windowOfCounter.innerText = counterClusters;
 }
 
-function drawArc(x, y) {
-    ctx.beginPath();
-    ctx.arc(x, y, 15, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.stroke();
+function alertInf() {
+    let counterClusters = document.getElementById("counterClusters").value;
+    return counterClusters > counterPoints;
+}
+
+function alertFuncKMeans() {
+    if (alertInf()) {
+        alert("Кластеров не может быть большем, чем точек. Измените количество!");
+    }
+    else {
+        clustering();
+    }
 }
 
 function random(maxVal) {
@@ -58,25 +65,20 @@ function randomPoints() {
     }
 }
 
-function alertFunc() {
-    let counterClusters = document.getElementById("counterClusters").value;
-    if (counterClusters > counterPoints) {
+function alertFuncHierarchical() {
+    if (alertInf()) {
         alert("Кластеров не может быть большем, чем точек. Измените количество!");
     }
     else {
-        bestClustering();
+        clusteringHierarchical();
     }
 }
 
-function clearing() {
-    let counterClusters = document.getElementById("counterClusters");
-    let windowOfCounter = document.getElementById("windowOfCounter");
-    windowOfCounter.innerText = "1";
-    counterClusters.value = 1;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    coords.x = [];
-    coords.y = [];
-    counterPoints = 0;
+function drawArc(x, y) {
+    ctx.beginPath();
+    ctx.arc(x, y, 15, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
 }
 
 function coloringClusters(counterClusters, clusteringGroups, centralPoints) {
@@ -89,6 +91,17 @@ function coloringClusters(counterClusters, clusteringGroups, centralPoints) {
         }
     }
     ctx.fillStyle = 'white';
+}
+
+function clearing() {
+    let counterClusters = document.getElementById("counterClusters");
+    let windowOfCounter = document.getElementById("windowOfCounter");
+    windowOfCounter.innerText = "1";
+    counterClusters.value = 1;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    coords.x = [];
+    coords.y = [];
+    counterPoints = 0;
 }
 
 function distances(counterClusters, clusteringGroups, centralPoints) {
@@ -210,30 +223,77 @@ function clustering() {
             previousCentralPoints = copy(centralPoints);
         }
     }
-    return {
-        centralPoints : centralPoints,
-        clusteringGroups : clusteringGroups,
-        counterClusters : counterClusters
-    }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    coloringClusters(counterClusters, clusteringGroups, centralPoints);
 }
 
-function bestClustering () {
-    let minDistance = Infinity;
-    let bestClusters;
-    for(let i = 0; i < 10; i++) {
-        let tempDistance = 0;
-        let resultClustering = clustering();
-        for(let j = 0; j < resultClustering.counterClusters; j++) {
-            for(let k in resultClustering.clusteringGroups[j]) {
-                tempDistance += Math.sqrt(Math.pow((resultClustering.centralPoints.x[j] - coords.x[resultClustering.clusteringGroups[j][k]]), 2) +
-                    Math.pow((resultClustering.centralPoints.y[j] - coords.y[resultClustering.clusteringGroups[j][k]]), 2));
+function findCenter(array) {
+    let x = 0;
+    let y = 0;
+    for(let i = 0; i < array.length; i++) {
+        x += coords.x[array[i]];
+        y += coords.y[array[i]];
+    }
+    x = x/array.length;
+    y = y/array.length;
+    return {
+        x : x,
+        y : y
+    };
+}
+
+function clustersPop(clusteringGroups, secCluster) {
+    let temp = clusteringGroups[secCluster];
+    clusteringGroups[secCluster] = clusteringGroups[clusteringGroups.length-1];
+    clusteringGroups[clusteringGroups.length-1] = temp;
+    clusteringGroups.pop();
+}
+
+function clusteringHierarchical() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    let counterClusters = document.getElementById("counterClusters").value;
+
+    let clusteringGroups = [];
+
+    for(let i = 0; i < counterPoints; i++) {
+        clusteringGroups[i] = [];
+        clusteringGroups[i].push(i);
+    }
+
+    while (clusteringGroups.length > counterClusters) {
+        let minDist = Infinity;
+        let firstCluster = 0;
+        let secCluster = 0;
+        for (let i = 0; i < clusteringGroups.length; i++) {
+            let cordsI = findCenter(clusteringGroups[i]);
+            for (let j = i + 1; j < clusteringGroups.length; j++) {
+                let cordsJ = findCenter(clusteringGroups[j]);
+                let dist = Math.sqrt(Math.pow((cordsJ.x - cordsI.x), 2) + Math.pow((cordsJ.y - cordsI.y), 2));
+                if (dist < minDist) {
+                    minDist = dist;
+                    firstCluster = i;
+                    secCluster = j;
+                }
             }
         }
-        if (tempDistance < minDistance) {
-            minDistance = tempDistance;
-            bestClusters = resultClustering;
+        for(let i = 0; i < clusteringGroups[secCluster].length; i++) {
+            clusteringGroups[firstCluster].push(clusteringGroups[secCluster][i]);
+        }
+        clustersPop(clusteringGroups, secCluster);
+    }
+    coloringClustersHierarchical(counterClusters, clusteringGroups);
+}
+
+function coloringClustersHierarchical(counterClusters, clusteringGroups) {
+    for (let i = 0; i < counterClusters; i++) {
+        ctx.fillStyle = chooseColors(i);
+        ctx.beginPath();
+        let centerCord = findCenter(clusteringGroups[i]);
+        ctx.fillRect(centerCord.x-10, centerCord.y-10, 20, 20);
+        for (let j in clusteringGroups[i]) {
+            drawArc(coords.x[clusteringGroups[i][j]], coords.y[clusteringGroups[i][j]]);
         }
     }
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    coloringClusters(bestClusters.counterClusters, bestClusters.clusteringGroups, bestClusters.centralPoints);
+    ctx.fillStyle = 'white';
 }
