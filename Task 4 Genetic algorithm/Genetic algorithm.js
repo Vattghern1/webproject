@@ -8,32 +8,16 @@ ctx.strokeStyle = "#404040";
 ctx.lineWidth = 4;
 ctx.fillStyle = "white";
 
+
 let coords = {
     x : [],
     y : []
 }
-
-//algorithm parameters:
-const generationMax = 400;
-const mutationPercent = 50;
-const iterationCount = 3600;
-
 let distMatrix = [];
 let counterPoints = 0;
 let points = [];
 let results = [];
 let generationCounter = 0;
-
-function clearing() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    coords.x = [];
-    coords.y = [];
-    distMatrix = [];
-    counterPoints = 0;
-    points = [];
-    results = [];
-    generationCounter = 0;
-}
 
 function drawNums(x, y, num) {
     ctx.fillStyle = 'black';
@@ -50,18 +34,11 @@ function drawArc(x, y) {
     ctx.stroke();
 }
 
-function pushCoords(x, y) {
-    drawArc(x, y);
-    coords.x.push(x);
-    coords.y.push(y);
-}
-
 canvas.addEventListener('mousedown', function (e) {
     let tempX = e.clientX-237;
     let tempY = e.clientY-30;
     points.push(counterPoints++);
     drawNums(tempX, tempY, counterPoints);
-    pushCoords(tempX, tempY);
 });
 
 function fullMatrix () {
@@ -149,7 +126,6 @@ function subCrossing(firstParent, secondParent, child, pointGap) {
 }
 
 function crossing(firstParent, secondParent) {
-
     let pointGap = random(counterPoints - 2);
     let child1 = [];
     let child2 = [];
@@ -250,19 +226,17 @@ function drawPath(path) {
             drawArc(coords.x[i], coords.y[i]);
             drawNums(coords.x[i], coords.y[i], i + 1);
         }
-    }, 100);
-    clearTimeout();
+    }, 0);
 }
 
-function geneticAlg() {
+}
 
     fullMatrix();
-
+    shuffle(points);
     let generations = permute(points);
-
     for(let i = 0; i < iterationCount; i++) {
-        let countCrossings = Math.floor(generations.length * 0.5);
-        for(let j = 0; j < countCrossings; j += 2) {
+        let crossingsCount = Math.floor(generations.length / 2) - 1;
+        for(let j = 0; j < crossingsCount; j += 2) {
             let children = crossing(generations[j], generations[j+1]);
             mutation(children.child1);
             mutation(children.child2);
@@ -272,7 +246,7 @@ function geneticAlg() {
 
         quickSort(generations);
 
-        for(let j = 0; j < countCrossings; j++) {
+        for(let j = 0; j < crossingsCount; j++) {
             generations.pop();
         }
 

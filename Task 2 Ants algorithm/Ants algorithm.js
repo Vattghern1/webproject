@@ -217,27 +217,12 @@ function antsAlgorithm(){
 document.getElementById("buttonStart").onclick = drawLines;
 
 function drawLines(){ //соединяем города из пути коммивояжера линиями
+
     let path = antsAlgorithm();
 
     for (let i = 0; i <= path.length - 2; i++){
-        
-
     }
 
-
-
-}
-
-function draww(path, i){
-    let canvas = document.getElementById("fieldForPoints");
-    let context = canvas.getContext('2d');
-
-    context.beginPath();
-    context.lineWidth = 2;
-    context.strokeStyle = 'black';
-    context.moveTo(coordinates[path[i] - 1].x, coordinates[path[i] - 1].y);
-    context.lineTo(coordinates[path[i + 1] - 1].x, coordinates[path[i + 1] - 1].y);
-    context.stroke();
 }
 
 document.getElementById("buttonClear").onclick = clearing;
