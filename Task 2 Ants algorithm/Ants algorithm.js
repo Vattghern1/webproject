@@ -1,4 +1,4 @@
-import {swap, qsort} from "./Quick-Sort.js";
+import {qsort} from "./Quick-Sort.js";
 
 document.addEventListener("DOMContentLoaded", start);
 
@@ -7,7 +7,6 @@ let number = 1;
 let context = canvas.getContext('2d');
 let answerField = document.getElementById("answer");
 let field = answerField.getContext('2d');
-
 
 function start(){
     canvas.addEventListener('mousedown', function (e) {
@@ -199,7 +198,6 @@ function antsAlgorithm(){
             if (currentLenght < currentMinLenght){
                 currentMinLenght = currentLenght;
                 currentShortestPath = visited;
-                console.log(t);
             }
 
         }
@@ -213,13 +211,9 @@ function antsAlgorithm(){
 
     }
 
-    let answerField = document.getElementById("answer");
-    let field = answerField.getContext('2d');
-
     field.font = '60px Verdana';
     field.fillText(currentMinLenght,5 , 125);
     field.font = 'bold 10px sans-serif';
-
 
     return currentShortestPath;
 
@@ -228,29 +222,34 @@ function antsAlgorithm(){
 document.getElementById("buttonStart").onclick = drawLines;
 
 function drawLines(){ //соединяем города из пути коммивояжера линиями
-    let canvas = document.getElementById("fieldForPoints");
-    let context = canvas.getContext('2d');
-
     let answerField = document.getElementById("answer");
     let field = answerField.getContext('2d');
 
     let path = antsAlgorithm();
 
-    for (let i = 0; i <= path.length - 2; i++){
+    let i = 0;
+
+    function go(){
         context.beginPath();
         context.lineWidth = 2;
         context.strokeStyle = 'black';
         context.moveTo(coordinates[path[i] - 1].x, coordinates[path[i] - 1].y);
         context.lineTo(coordinates[path[i + 1] - 1].x, coordinates[path[i + 1] - 1].y);
         context.stroke();
+
+        if (i === path.length - 2){
+            clearInterval(timerId);
+        }
+
+        i++;
     }
+
+    go();
+    let timerId = setInterval(go, 125);
 
     field.font = '60px Verdana';
     field.fillText("Длина пути:",5 , 45);
     field.font = 'bold 10px sans-serif';
-
-
-
 }
 
 document.getElementById("buttonClear").onclick = clearing;

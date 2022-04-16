@@ -55,4 +55,4 @@ function qsort(arr){
     }
 }
 
-export {swap, qsort};
+export {qsort};
